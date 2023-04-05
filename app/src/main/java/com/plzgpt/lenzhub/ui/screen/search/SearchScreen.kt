@@ -1,5 +1,7 @@
 package com.plzgpt.lenzhub.ui.screen.search
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
+import com.plzgpt.lenzhub.ui.route.NavigationGraphSearch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchScreen() {
     Box(
@@ -20,15 +25,14 @@ fun SearchScreen() {
             .background(Color.White)
 
     ) {
-        Text(
-            text = "Search",
-            modifier = Modifier
-                .align(Alignment.Center),
-            style = TextStyle(
-                color = Color.Black,
-                fontWeight = FontWeight(400),
-                fontSize = 70.sp
-            )
-        )
+        SearchNavScreen()
     }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun SearchNavScreen() {
+    val navController = rememberNavController()
+    NavigationGraphSearch(navController = navController)
 }
