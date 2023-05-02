@@ -24,9 +24,9 @@ import com.plzgpt.lenzhub.ui.screen.upload.UploadScreen
 import kotlinx.coroutines.CoroutineScope
 
 enum class NAV_ROUTE_BNB(val routeName: String, val description: String, val icon: Int) { //main 패키지 루트.
-    FOLLOW("Main", "메인", R.drawable.ic_home),
+    FOLLOW("Main", "피드", R.drawable.ic_home),
     DISCOVER("DISCOVER", "탐색", R.drawable.ic_search_small),
-    UPLOAD("UPLOAD", "업로드", R.drawable.ic_plus_solid),
+    UPLOAD("UPLOAD", "필터", R.drawable.ic_filter),
     MYPROFILE("MYPROFILE", "내 프로필", R.drawable.ic_user),
 
 }
