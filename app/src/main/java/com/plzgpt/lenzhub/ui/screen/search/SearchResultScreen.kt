@@ -33,7 +33,7 @@ fun SearchResultScreen(
     searchedText: String
 ) {
     val focusManager = LocalFocusManager.current
-    val searchText = remember { mutableStateOf("") } //textField 데이터 값.
+    val searchText = remember { mutableStateOf(searchedText) } //textField 데이터 값.
     val isTextFieldSearchFocused = remember { mutableStateOf(false) } //textField가 포커싱 되어 있는지 여부.
 
     val applicationContext = LocalContext.current.applicationContext
