@@ -40,7 +40,7 @@ fun EditText(
     singleLine: Boolean = false, //textField를 한 줄 고정할 것인지 여부.
     description: String = "", //textField 아래에 들어갈 설명.
     errorListener: MutableState<Boolean> = mutableStateOf(false), //textField에 들어갈 값의 조건이 틀렸는지 여부.
-    textStyle: TextStyle = TextStyle(fontSize = 20.sp, color = mainBlack), //textField의 글자 스타일 설정.
+    textStyle: TextStyle = TextStyle(fontSize = 20.sp, color = LHBlack), //textField의 글자 스타일 설정.
     keyboardActions: KeyboardActions = KeyboardActions(),
     placeholder: String = "",
     placeholderSize: Int = 20
@@ -52,7 +52,7 @@ fun EditText(
                 title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 12.sp,
-                color = if(errorListener.value) mainError else if (isTextFieldFocused.value) mainPoint else mainGray
+                color = if(errorListener.value) LHError else if (isTextFieldFocused.value) LHPoint else LHGray
             )
             Spacer(modifier = Modifier.height(5.dp))
         }
@@ -65,7 +65,7 @@ fun EditText(
                 .border(
                     width = 1.dp,
                     shape = RoundedCornerShape(10.dp),
-                    color = if (isTextFieldFocused.value) if (errorListener.value) mainError else mainPoint else if (errorListener.value) mainBackground else mainBackground
+                    color = if (isTextFieldFocused.value) if (errorListener.value) LHError else LHPoint else if (errorListener.value) LHBackground else LHBackground
                 )
                 .animateContentSize(),
             value = data.value,
@@ -75,21 +75,21 @@ fun EditText(
             },
             shape = RoundedCornerShape(10.dp),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = if (errorListener.value) mainError else if (isTextFieldFocused.value) mainBackground else mainBackground,
+                backgroundColor = if (errorListener.value) LHError else if (isTextFieldFocused.value) LHBackground else LHBackground,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
             textStyle = textStyle,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             singleLine = singleLine,
-            placeholder = { Text(placeholder, color = mainGreen, fontSize = placeholderSize.sp) },
+            placeholder = { Text(placeholder, color = LHGreen, fontSize = placeholderSize.sp) },
             visualTransformation =
             if (keyboardType == KeyboardType.Password) PasswordVisualTransformation()
             else VisualTransformation.None
         )
         if(description != "") {
             Spacer(modifier = Modifier.height(5.dp))
-            Text(description, fontWeight = FontWeight.Bold, fontSize = 11.sp, color = if (errorListener.value) mainError else if (isTextFieldFocused.value) mainPoint else mainGray)
+            Text(description, fontWeight = FontWeight.Bold, fontSize = 11.sp, color = if (errorListener.value) LHError else if (isTextFieldFocused.value) LHPoint else LHGray)
         }
     }
 }

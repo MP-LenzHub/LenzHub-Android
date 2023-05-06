@@ -24,7 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.plzgpt.lenzhub.R
-import com.plzgpt.lenzhub.ui.theme.mainBlack
+import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.util.bounceClick
 
 enum class LenzMakeScreen (val title: String) {
@@ -66,7 +66,7 @@ fun LenzMakeScreen (
                 Spacer(modifier = Modifier.width(18.dp))
                 Text(
                     text = currentScreen.title,
-                    color = mainBlack,
+                    color = LHBlack,
                     fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.weight(1f))
