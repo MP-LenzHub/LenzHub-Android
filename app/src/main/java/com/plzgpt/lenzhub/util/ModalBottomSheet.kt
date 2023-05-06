@@ -12,12 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plzgpt.lenzhub.R
-import com.plzgpt.lenzhub.ui.theme.mainGray
+import com.plzgpt.lenzhub.ui.theme.LHGray
 
 
 //바텀 모달 시트
@@ -47,7 +46,7 @@ fun ModalBottomSheet(
                     Box(modifier = Modifier
                         .width(40.dp)
                         .height(5.dp)
-                        .background(mainGray, RoundedCornerShape(30.dp))
+                        .background(LHGray, RoundedCornerShape(30.dp))
                         .alpha(0.2f)
                     )
                     Spacer(modifier = Modifier.size(30.dp))

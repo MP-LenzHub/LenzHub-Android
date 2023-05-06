@@ -25,9 +25,9 @@ import com.google.accompanist.pager.rememberPagerState
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.data.Category
 import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
-import com.plzgpt.lenzhub.ui.theme.mainBackground
-import com.plzgpt.lenzhub.ui.theme.mainBlack
-import com.plzgpt.lenzhub.ui.theme.mainGray
+import com.plzgpt.lenzhub.ui.theme.LHBackground
+import com.plzgpt.lenzhub.ui.theme.LHBlack
+import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.plzgpt.lenzhub.util.ModalBottomSheet
 import com.plzgpt.lenzhub.util.ModalBottomSheetItem
 import com.plzgpt.lenzhub.util.addFocusCleaner
@@ -142,8 +142,8 @@ fun SearchMainScreen(navController: NavHostController) {
                             Text(text = "무료필터",
                                 fontSize = 20.sp,
                                 color =
-                                if(pagerState.currentPage == 0) mainBlack
-                                else mainGray,
+                                if(pagerState.currentPage == 0) LHBlack
+                                else LHGray,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .bounceClick {
@@ -155,8 +155,8 @@ fun SearchMainScreen(navController: NavHostController) {
                             Text(text = "유료필터",
                                 fontSize = 20.sp,
                                 color =
-                                if(pagerState.currentPage == 1) mainBlack
-                                else mainGray,
+                                if(pagerState.currentPage == 1) LHBlack
+                                else LHGray,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.bounceClick {
                                     scope.launch {
@@ -180,7 +180,7 @@ fun SearchMainScreen(navController: NavHostController) {
                                 }
                                 .fillMaxHeight()
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(color = mainBackground),
+                                .background(color = LHBackground),
 
                             ) {
                             Row(
@@ -194,7 +194,7 @@ fun SearchMainScreen(navController: NavHostController) {
                                     style = TextStyle(
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight(600),
-                                        color = mainBlack
+                                        color = LHBlack
                                     )
                                 )
                                 //카테고리 옆에 있는 ^ 이거 거꾸로 이미지
