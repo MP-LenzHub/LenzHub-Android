@@ -217,22 +217,8 @@ fun SearchMainScreen(navController: NavHostController) {
                     ) { page ->
                         when (page) {
                             //나중에 API로 받은 값(List)도 넣어줘야할듯
-                            0 -> Text(
-                                text = "무료 필터들 후루룩",
-                                style = TextStyle(
-                                    color = Color.Black,
-                                    fontWeight = FontWeight(400),
-                                    fontSize = 70.sp
-                                )
-                            )
-                            1 -> Text(
-                                text = "유료 필터들 후루룩",
-                                style = TextStyle(
-                                    color = Color.Black,
-                                    fontWeight = FontWeight(400),
-                                    fontSize = 70.sp
-                                )
-                            )
+                            0 -> SearchCategoryFreeScreen(selectedCategory.value)
+                            1 -> SearchCategoryPayScreen(selectedCategory.value)
                         }
 
                     }

@@ -15,3 +15,4 @@ val LHGray = Color(0xFFB6BFBA)
 val LHPoint = Color(0xFFBCE3FF)
 val LHError = Color(0xFFFDA5B5)
 val LHGreen = Color(0xFFA5FDB9)
+val LHTextFieldPoint = Color(0xFFEDF5F5) //TextField 포커싱 색
