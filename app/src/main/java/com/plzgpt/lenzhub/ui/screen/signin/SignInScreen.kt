@@ -1,8 +1,10 @@
 package com.plzgpt.lenzhub.ui.screen.login
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Handler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -68,7 +70,7 @@ fun SignInScreen() {
     val isSignIn = remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
-    val mContext = LocalContext.current
+    val activity = (LocalContext.current as? Activity)
 
     Box(
         modifier = Modifier
@@ -154,21 +156,16 @@ fun SignInScreen() {
         visible = isSignIn.value,
         modifier = Modifier
             .fillMaxSize(),
-        enter = fadeIn(),
+        enter = fadeIn(animationSpec = tween(600)),
         exit = fadeOut(),
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_signin_result),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
-
         )
-
-        val intent = Intent(mContext, LoginActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-        Handler().postDelayed({
-            mContext.startActivity(intent)}, 1000L)
+        // 1.2초 뒤 로그인 창으로 이동
+        Handler().postDelayed({activity?.finish()}, 1200L)
     }
 }
 

@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.plzgpt.lenzhub.ui.screen.search.SearchMainScreen
+import com.plzgpt.lenzhub.ui.screen.search.SearchingScreen
+import com.plzgpt.lenzhub.util.SearchTextField
 
 
 enum class NAV_ROUTE_SEARCH(val routeName: String, val description: String) { //upload 패키지 루트.
@@ -33,7 +35,7 @@ fun NavigationGraphSearch(
         composable(
             NAV_ROUTE_SEARCH.DISCOVERSEARCHING.routeName,
         ) { backStackEntry ->
-
+            SearchingScreen(navController)
         }
         composable(
             NAV_ROUTE_SEARCH.DISCOVERSEARCHRESULT.routeName + "/{searchText}",
