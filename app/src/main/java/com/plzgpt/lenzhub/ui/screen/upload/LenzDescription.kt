@@ -13,10 +13,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.plzgpt.lenzhub.ui.theme.mainBlack
+import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.R
-import com.plzgpt.lenzhub.ui.theme.mainPoint
+import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.ui.view.EditText
 import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
@@ -104,7 +104,7 @@ fun Category(
     ) {
         Text(
             text = name,
-            color = mainBlack,
+            color = LHBlack,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -120,9 +120,9 @@ fun Category(
             },
             tint =
             if(isSelected.value) {
-                mainPoint
+                LHPoint
             } else {
-                mainBlack
+                LHBlack
             },
             contentDescription = null,
             modifier = Modifier

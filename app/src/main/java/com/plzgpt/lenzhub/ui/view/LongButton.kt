@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.plzgpt.lenzhub.ui.theme.mainPoint
+import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.util.bounceClick
 
 @Composable
@@ -28,7 +28,7 @@ fun LongButton(
     text: String = "디폴트",
     textColor: Color = Color.White,
     textSize: Float = 16f,
-    buttonColor: Color = mainPoint,
+    buttonColor: Color = LHPoint,
     onClick: () -> Unit = { }
 ) {
     Card (

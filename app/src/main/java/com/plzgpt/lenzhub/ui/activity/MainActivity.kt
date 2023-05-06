@@ -110,7 +110,6 @@ fun BottomNav(
 
 
 @SuppressLint("UnrememberedMutableState")
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainNavScreen() {

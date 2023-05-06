@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.plzgpt.lenzhub.ui.theme.mainBlack
-import com.plzgpt.lenzhub.ui.theme.mainGray
+import com.plzgpt.lenzhub.ui.theme.LHBlack
+import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.util.bounceClick
 import kotlinx.coroutines.launch
@@ -69,8 +69,8 @@ fun UploadScreen(
                 text = "렌즈 만들기",
                 fontSize = 20.sp,
                 color =
-                if (pagerState.currentPage == 0) mainBlack
-                else mainGray,
+                if (pagerState.currentPage == 0) LHBlack
+                else LHGray,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .bounceClick {
@@ -82,8 +82,8 @@ fun UploadScreen(
             Text(text = "렌즈 끼우기",
                 fontSize = 20.sp,
                 color =
-                if (pagerState.currentPage == 1) mainBlack
-                else mainGray,
+                if (pagerState.currentPage == 1) LHBlack
+                else LHGray,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.bounceClick {
                     scope.launch {
