@@ -16,16 +16,7 @@ class SignInActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LenzhubTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Box(modifier = Modifier.fillMaxSize()){
-                        SignInScreen()
-
-                    }
-                }
+                SignInScreen()
             }
         }
     }
