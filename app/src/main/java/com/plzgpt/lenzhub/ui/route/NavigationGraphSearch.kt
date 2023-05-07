@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.plzgpt.lenzhub.ui.screen.search.SearchMainScreen
+import com.plzgpt.lenzhub.ui.screen.search.SearchResultScreen
 import com.plzgpt.lenzhub.ui.screen.search.SearchingScreen
 import com.plzgpt.lenzhub.util.SearchTextField
 
@@ -40,7 +41,8 @@ fun NavigationGraphSearch(
         composable(
             NAV_ROUTE_SEARCH.DISCOVERSEARCHRESULT.routeName + "/{searchText}",
         ) { backStackEntry ->
-
+            val searchText = backStackEntry.arguments?.getString("searchText") ?: ""
+            SearchResultScreen(navController, searchText)
         }
         composable(
             NAV_ROUTE_SEARCH.DISCOVERSEARCHUSERPROFILE.routeName
