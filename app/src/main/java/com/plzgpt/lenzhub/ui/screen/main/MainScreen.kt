@@ -183,7 +183,7 @@ fun PostItem(index: Int){
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(text = "3", Modifier
                             .padding(end = 15.dp),fontSize = 13.sp, color = Color.Gray
-                            )
+                        )
                     }
                 }
             }
