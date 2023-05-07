@@ -10,6 +10,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,7 +41,7 @@ fun SearchCategoryCard(
 
 ) {
     val mContext = LocalContext.current
-    val likeCnt = { mutableStateOf(postData.likes) }
+    val likeCnt = remember { mutableStateOf(postData.likes) }
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.StartIntentSenderForResult()) {
@@ -188,7 +189,7 @@ fun SearchCategoryCard(
                 Text(
                     modifier = Modifier
                         .padding(start = 5.dp),
-                    text = "$likeCnt",
+                    text = "${likeCnt.value}",
                     style = TextStyle(color = LHGray,
                         fontWeight = FontWeight(400),fontSize = 12.sp)
                 )
