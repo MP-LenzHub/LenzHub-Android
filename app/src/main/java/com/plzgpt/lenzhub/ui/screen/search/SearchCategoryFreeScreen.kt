@@ -117,4 +117,3 @@ fun SearchCategoryFreeScreen(category: Category){
     }
 
 }
-
