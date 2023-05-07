@@ -16,3 +16,6 @@ val LHPoint = Color(0xFFBCE3FF)
 val LHError = Color(0xFFFDA5B5)
 val LHGreen = Color(0xFFA5FDB9)
 val LHTextFieldPoint = Color(0xFFEDF5F5) //TextField 포커싱 색
+val LHMainBackground = Color(0xFFEFEFEF) //메인 배경색
+val LHLikeIcon = Color(0xFFC2CD)
+val LHDivider = Color(0xFFEBEEED)
