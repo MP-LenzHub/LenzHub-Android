@@ -41,7 +41,7 @@ fun LenzMakeScreen (
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LenzMakeScreen.valueOf(
-        backStackEntry?.destination?.route ?: LenzMakeScreen.Description.name
+        backStackEntry?.destination?.route ?: LenzMakeScreen.Maker.name
     )
 
     Scaffold (
@@ -84,12 +84,11 @@ fun LenzMakeScreen (
     ) {
         NavHost(
             navController = navController,
-            startDestination = LenzMakeScreen.Description.name,
+            startDestination = LenzMakeScreen.Maker.name,
             modifier = Modifier.padding(it)
         ) {
             composable(route = LenzMakeScreen.Maker.name) {
-                LenzMaker(
-                )
+                LenzMaker { navController.navigate(route = LenzMakeScreen.Description.name) }
             }
             composable(route = LenzMakeScreen.Description.name) {
                 LenzDescription(
