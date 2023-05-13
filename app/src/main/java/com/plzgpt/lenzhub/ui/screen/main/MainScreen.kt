@@ -52,11 +52,13 @@ fun PostList(){
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(top = 9.dp)){
+        .padding(top = 9.dp, start = 16.dp, end = 16.dp)
+    ) {
         Text(text = "LenzHub", fontSize = 24.sp)
+        Spacer(modifier = Modifier.height(12.dp))
 
         LazyColumn(state = scrollState,
-            contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ){
             items(listSize){ index ->
@@ -67,10 +69,45 @@ fun PostList(){
 }
 
 @Composable
+fun ProfileInfo(index:Int, mode : Int = 0){
+    Surface(
+        modifier = if (mode == 0) Modifier.size(24.dp) else Modifier.size(50.dp),
+        color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
+        shape = CircleShape
+    ) {
+        Image(painterResource(id = R.drawable.ic_food), contentDescription = "")
+    }
+    Spacer(if(mode==0) Modifier.width(8.dp) else Modifier.width(18.dp))
+    Text(
+        "#$index eunseob",
+        style = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = if(mode==0) 17.sp else 18.sp
+        ))
+
+    // 비슷한 구조라서 메인이 post의 프로필인지, 프로필screen의 프로필인지에 따라 크기 변경
+    if(mode != 0){
+        // 프리미엄 요금제냐는 뜻 - 구독제를 쓰냐는 뜻
+        var tier = "p"
+        if(tier == "p") {
+            Spacer(Modifier.width(3.dp))
+            Surface(
+                modifier = Modifier.size(20.dp),
+                shape = CircleShape
+            ) {
+                Image(painterResource(id = R.drawable.ic_check_on), contentDescription = "")
+            }
+        }
+
+    }
+}
+
+@Composable
 fun PostItem(index: Int){
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .bounceClick {  },
         elevation = 4.dp,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -87,28 +124,17 @@ fun PostItem(index: Int){
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row() {
-
-                    Surface(
-                        modifier = Modifier.size(24.dp),
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
-                        shape = CircleShape
-                    ) {
-                        Image(painterResource(id = R.drawable.ic_animal), contentDescription = "")
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        "#$index eunseob",
-                        style = MaterialTheme.typography.subtitle1,
-                        fontSize = 17.sp
-                    )
+                    ProfileInfo(index = index, mode = 0)
                 }
 
-                IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(24.dp).bounceClick {  }) {
+                IconButton(onClick = { /*TODO*/ }, modifier = Modifier
+                    .size(24.dp)
+                    .bounceClick { }) {
                     Icon(
                         painter = painterResource(
                             id = R.drawable.ic_heart_solid
                         ), contentDescription = null,
-                        tint = Color(0xFFFF6767)
+                        tint = Color(0xFFFFC2CD)
                     )
                 }
             }
@@ -125,7 +151,7 @@ fun PostItem(index: Int){
                 Surface(
                     modifier = Modifier
                         .size(150.dp)
-                        .bounceClick {  },
+                        .bounceClick { },
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
                     Image(painterResource(id = R.drawable.ic_home_ex1), contentDescription = "")
@@ -134,7 +160,7 @@ fun PostItem(index: Int){
                 Surface(
                     modifier = Modifier
                         .size(150.dp)
-                        .bounceClick {  },
+                        .bounceClick { },
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
                     Image(painterResource(id = R.drawable.ic_home_ex1), contentDescription = "")
