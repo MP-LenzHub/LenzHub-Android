@@ -22,7 +22,7 @@ import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
 
 @Composable
-fun LenzDescription() {
+fun LenzDescription(viewModel: UploadViewModel) {
     var focusManager = LocalFocusManager.current
     var title = remember { mutableStateOf("") }
 
