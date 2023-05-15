@@ -52,6 +52,7 @@ class PhotoFilter(context: Context, photo: Bitmap): GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+        Log.d("PhotoFilter", "onSurfaceCreated")
         effectFactory = EffectContext.createWithCurrentGlContext().factory
         brightnessEffect = effectFactory.createEffect(EffectFactory.EFFECT_BRIGHTNESS)
         contrastEffect = effectFactory.createEffect(EffectFactory.EFFECT_CONTRAST)
@@ -61,13 +62,13 @@ class PhotoFilter(context: Context, photo: Bitmap): GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+        Log.d("PhotoFilter", "onSurfaceChanged")
         GLES20.glViewport(0,0,photoWidth, photoHeight)
         GLES20.glClearColor(0f,0f,0f,1f)
         generateSquare()
     }
 
     override fun onDrawFrame(gl: GL10?) {
-        Log.d("PhotoFilter", "onDrawFrame")
 
         brightnessEffect.setParameter("brightness", filterValueMap["Brightness"]!!)
         brightnessEffect.apply(textures[0], photoWidth, photoHeight, textures[1])
