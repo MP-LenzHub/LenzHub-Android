@@ -35,9 +35,9 @@ import com.google.accompanist.pager.rememberPagerState
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.data.Category
 import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
-import com.plzgpt.lenzhub.ui.screen.main.PostList
 import com.plzgpt.lenzhub.ui.screen.main.ProfileInfo
 import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryFreeScreen
+import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryLikeScreen
 import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryPayScreen
 import com.plzgpt.lenzhub.ui.theme.LHBackground
 import com.plzgpt.lenzhub.ui.theme.LHBlack
@@ -89,8 +89,9 @@ fun MainScreen(id: Int, filter: Int, like: Int){
 @Composable
 fun FilterLike(filter : Int, like : Int){
 
-    Row(modifier = Modifier.padding(top = 0.dp, start = 37.dp, end = 18.dp, bottom = 13.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Row(modifier = Modifier.padding(top = 0.dp, start = 37.dp, end = 37.dp, bottom = 13.dp).fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ){
         Row(        verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.bounceClick {  }
@@ -143,7 +144,7 @@ fun FilterLike(filter : Int, like : Int){
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Pager(){
-    val titles = listOf("제작 필터", "저장 필터")
+    val titles = listOf("제작 필터", "저장 필터", "좋아요")
     val pagerState = rememberPagerState()
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
@@ -184,17 +185,21 @@ fun Pager(){
                         )
                     }
                 }
+                // 내 아이디
+                var myId = 77
+
                 //포스트, 큐레이션 텝 레이아웃
                 HorizontalPager(
                     modifier = Modifier
                         .fillMaxSize(),
-                    count = 2,
+                    count = 3,
                     state = pagerState
                 ) { page ->
                     when (page) {
                         //나중에 API로 받은 값(List)도 넣어줘야할듯
                         0 -> SearchCategoryFreeScreen(Category.PERSON)
                         1 -> SearchCategoryPayScreen(Category.ANIMAL)
+                        2 -> SearchCategoryLikeScreen(myId)
                     }
 
                 }
