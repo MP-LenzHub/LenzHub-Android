@@ -8,13 +8,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -23,11 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plzgpt.lenzhub.R
-import com.plzgpt.lenzhub.ui.activity.MainActivity
 import com.plzgpt.lenzhub.ui.theme.LHDivider
-import com.plzgpt.lenzhub.ui.theme.LHGray
-import com.plzgpt.lenzhub.ui.theme.LHLikeIcon
 import com.plzgpt.lenzhub.ui.theme.LHMainBackground
+import com.plzgpt.lenzhub.util.PostHeartCard
 import com.plzgpt.lenzhub.util.bounceClick
 
 @Preview
@@ -41,36 +38,49 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(LHMainBackground)
-    ) {
+            .padding(12.dp)
 
-        Column(modifier = Modifier
+    ) {
+        PostList()
+    }
+}
+
+@Composable
+fun PostList(){
+    val listSize = 10
+    val scrollState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    Column(
+        modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
+    ) {
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = "LenzHub", fontSize = 24.sp)
+        Spacer(modifier = Modifier.height(12.dp))
+
+
+        val listSize = 10
+        val scrollState = rememberLazyListState()
+        val coroutineScope = rememberCoroutineScope()
+
+
+        //받아와
+        // list 넘겨줘
+        LazyColumn(
+            state = scrollState,
+            contentPadding = PaddingValues(horizontal = 0.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "LenzHub", fontSize = 24.sp)
-            Spacer(modifier = Modifier.height(12.dp))
 
-
-            val listSize = 10
-            val scrollState = rememberLazyListState()
-            val coroutineScope = rememberCoroutineScope()
-
-
-            //받아와
-            // list 넘겨줘
-            LazyColumn(state = scrollState,
-                contentPadding = PaddingValues(horizontal = 0.dp, vertical = 18.dp),
-                verticalArrangement = Arrangement.spacedBy(18.dp)
-            ){
-
-                items(listSize){ index ->
-                    PostItem(index = index)
-                }
+            items(listSize) { index ->
+                PostItem(index = index)
             }
         }
     }
 }
+
 
 //@Composable
 //fun PostList(){
@@ -131,6 +141,9 @@ fun ProfileInfo(index:Int, mode : Int = 0){
 
 @Composable
 fun PostItem(index: Int){
+
+    val isLiked = remember { mutableStateOf(false) } // 좋아요 했는지 여부
+
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -152,17 +165,16 @@ fun PostItem(index: Int){
                 Row() {
                     ProfileInfo(index = index, mode = 0)
                 }
-
-                IconButton(onClick = { /*TODO*/ }, modifier = Modifier
-                    .size(24.dp)
-                    .bounceClick { }) {
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.ic_heart_solid
-                        ), contentDescription = null,
-                        tint = Color(0xFFFFC2CD)
-                    )
-                }
+                // 기존 좋아요 아이콘
+//                IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(24.dp).bounceClick {  }) {
+//                    Icon(
+//                        painter = painterResource(
+//                            id = R.drawable.ic_heart_solid
+//                        ), contentDescription = null,
+//                        tint = Color(0xFFFF6767)
+//                    )
+//                }
+                PostHeartCard(modifier = Modifier, heartState = isLiked)
             }
             Divider(color = LHDivider, thickness = 1.dp)
             Row(

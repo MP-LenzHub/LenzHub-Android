@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ApplicationClass : Application() {
-    private val baseUrl = ""
+    private val baseUrl = "http://43.201.241.228:8080"
 
     val gson: Gson = GsonBuilder().setLenient().create()
 
@@ -16,14 +16,15 @@ class ApplicationClass : Application() {
         lateinit var sharedPreferences: SharedPreferences
 
         lateinit var retrofit: Retrofit
+        val clientId = "Client ID"
     }
 
     override fun onCreate() {
         super.onCreate()
         sharedPreferences =
-            applicationContext.getSharedPreferences("GlobalSP", MODE_PRIVATE)
-        // 레트로핏 인스턴스 생성
-        // initRetrofitInstance()
+            applicationContext.getSharedPreferences("LHPref", MODE_PRIVATE)
+//         레트로핏 인스턴스 생성
+         initRetrofitInstance()
     }
 
     private fun initRetrofitInstance() {

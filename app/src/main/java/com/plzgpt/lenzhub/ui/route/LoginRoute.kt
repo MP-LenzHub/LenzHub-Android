@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.plzgpt.lenzhub.ui.screen.login.LoginScreen
-import com.plzgpt.lenzhub.ui.screen.login.SignInScreen
+import com.plzgpt.lenzhub.ui.screen.signin.SignInScreen
 
 enum class NAV_ROUTE_LOGIN(val routeName: String, val description: String) {
     LOGIN("LOGIN_MAIN", "로그인 창"),

@@ -16,6 +16,7 @@
         android:roundIcon="@drawable/ic_icon_menu"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lenzhub"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".ui.screen.upload.LenzApplyActivity"
