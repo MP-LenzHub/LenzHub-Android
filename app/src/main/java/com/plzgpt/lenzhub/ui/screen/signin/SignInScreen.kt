@@ -1,14 +1,13 @@
-package com.plzgpt.lenzhub.ui.screen.login
+package com.plzgpt.lenzhub.ui.screen.signin
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Handler
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,16 +17,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -37,22 +33,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
+import com.google.gson.JsonObject
 import com.plzgpt.lenzhub.R
-import com.plzgpt.lenzhub.ui.activity.LoginActivity
-import com.plzgpt.lenzhub.ui.activity.MainActivity
-import com.plzgpt.lenzhub.ui.activity.SignInActivity
-import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
-import com.plzgpt.lenzhub.ui.theme.LHBlack
-import com.plzgpt.lenzhub.ui.theme.LHErrorAlpha
+import com.plzgpt.lenzhub.api.RetrofitBuilder.signupAPI
+import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
 import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.util.EditText
 import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
-import kotlinx.coroutines.delay
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun SignInScreen() {
+
+    val mContext = LocalContext.current
 
     val textFieldId = remember { mutableStateOf("") }
     val isTextFieldFocusedId = remember { mutableStateOf(false) }
@@ -108,7 +108,11 @@ fun SignInScreen() {
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            EditText(title = "비밀번호 확인", data = textFieldCheckPw, isTextFieldFocused = isTextFieldFocusedCheckPw)
+            EditText(
+                title = "비밀번호 확인",
+                data = textFieldCheckPw,
+                isTextFieldFocused = isTextFieldFocusedCheckPw
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -122,7 +126,11 @@ fun SignInScreen() {
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            EditText(title = "닉네임", data = textFieldName, isTextFieldFocused = isTextFieldFocusedName)
+            EditText(
+                title = "닉네임",
+                data = textFieldName,
+                isTextFieldFocused = isTextFieldFocusedName
+            )
 
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -131,7 +139,43 @@ fun SignInScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .bounceClick {
-                        isSignIn.value = true
+                        val jsonObject = JsonObject().apply {
+                            addProperty("name", textFieldName.value)
+                            addProperty("userId", textFieldId.value)
+                            addProperty("password", textFieldCheckPw.value)
+                        }
+                        val mediaType = "application/json; charset=utf-8".toMediaType()
+                        val body = jsonObject.toString().toRequestBody(mediaType)
+                        val requestBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), jsonObject.toString())
+                        Log.d("signin",requestBody.toString())
+                        signupAPI.signIn(body)
+                            .enqueue(object : Callback<SignInResponseDTO> {
+                                override fun onResponse(
+                                    call: Call<SignInResponseDTO>,
+                                    response: Response<SignInResponseDTO>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        val res = response.body()
+                                        if (res != null) {
+                                            if (res.isSuccess) {
+                                                isSignIn.value = true
+                                                Log.d("signin","성공")
+
+                                                Log.d("signin",res.message)
+                                                Toast.makeText(mContext, res.result.success.toString(), Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+                                }
+                                override fun onFailure(
+                                    call: Call<SignInResponseDTO>,
+                                    t: Throwable
+                                ) {
+                                    Toast.makeText(mContext, "서버가 응답하지 않아요", Toast.LENGTH_SHORT).show()
+                                }
+
+                            })
+
                     },
                 backgroundColor = LHPoint,
                 shape = RoundedCornerShape(10.dp),
@@ -165,7 +209,7 @@ fun SignInScreen() {
             contentScale = ContentScale.FillWidth
         )
         // 1.2초 뒤 로그인 창으로 이동
-        Handler().postDelayed({activity?.finish()}, 1200L)
+        Handler().postDelayed({ activity?.finish() }, 1200L)
     }
 }
 
