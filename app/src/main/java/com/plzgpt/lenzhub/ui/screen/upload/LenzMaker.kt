@@ -33,13 +33,13 @@ import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.ui.theme.LHPointAlpha
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.util.bounceClick
+import com.skydoves.landscapist.glide.GlideImage
 import kotlin.math.roundToInt
 
 
 enum class FilterType (val ko: String) {
     Brightness("밝기"),
     Contrast("대비"),
-
 }
 
 data class Filter (
@@ -49,7 +49,8 @@ data class Filter (
 )
 @Composable
 fun LenzMaker(
-    toNextScreen: () -> Unit
+    photo: Bitmap = BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.ic_lenz_apply),
+    onNext: () -> Unit = {}
 ) {
     Column(
         // width == height
@@ -58,12 +59,12 @@ fun LenzMaker(
             .background(LHBackground)
     ) {
         val context = LocalContext.current
-        val photo: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_lenz_make)
+        val p: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_lenz_make)
         var photoFilter = PhotoFilter(context, photo)
 
         AndroidView(
             factory = {
-                photoFilter = PhotoFilter(it, photo)
+                photoFilter = PhotoFilter(it, p)
                 GLSurfaceView(it).apply {
                     setEGLContextClientVersion(2)
                     setRenderer(photoFilter)
@@ -190,7 +191,7 @@ fun LenzMaker(
                                 .clip(CircleShape)
                                 .border(
                                     width = 1.dp,
-                                    color = if(it.type == currentFilter) LHPoint else LHBackground,
+                                    color = if (it.type == currentFilter) LHPoint else LHBackground,
                                     shape = CircleShape
                                 )
                         ) {
@@ -210,10 +211,16 @@ fun LenzMaker(
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
+            GlideImage(
+                imageModel = photo,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(50.dp)
+            )
             LongButton(
                 text = "다음",
                 onClick = {
-                    toNextScreen()
+                    onNext()
                 },
                 modifier = Modifier
                     .align(CenterHorizontally)

@@ -35,7 +35,7 @@ import com.skydoves.landscapist.glide.GlideImage
 
 //포스트, 큐레이션에 표시되는 카드들로 데이터 형식 알려주면 그때 넣겠삼삼
 @Composable
-fun SearchCategoryCard(
+fun  SearchCategoryCard(
     postData: GetSearchCategoryPost,
 //    postList: MutableState<GetSearchPost>
 

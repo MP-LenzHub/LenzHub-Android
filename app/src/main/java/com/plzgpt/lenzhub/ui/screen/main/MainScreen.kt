@@ -11,8 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,12 +28,15 @@ import com.plzgpt.lenzhub.ui.theme.LHDivider
 import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.plzgpt.lenzhub.ui.theme.LHLikeIcon
 import com.plzgpt.lenzhub.ui.theme.LHMainBackground
-import com.plzgpt.lenzhub.util.PostHeartCard
 import com.plzgpt.lenzhub.util.bounceClick
 
 @Preview
 @Composable
-fun MainScreen() {
+fun MainScreen(
+
+//LenzMakeScreen 참고
+
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,27 +54,94 @@ fun PostList(){
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 9.dp)){
-        Text(text = "LenzHub", fontSize = 24.sp)
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+        ) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(text = "LenzHub", fontSize = 24.sp)
+            Spacer(modifier = Modifier.height(12.dp))
 
-        LazyColumn(state = scrollState,
-            contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ){
-            items(listSize){ index ->
-                PostItem(index = index)
+
+            val listSize = 10
+            val scrollState = rememberLazyListState()
+            val coroutineScope = rememberCoroutineScope()
+
+
+            //받아와
+            // list 넘겨줘
+            LazyColumn(state = scrollState,
+                contentPadding = PaddingValues(horizontal = 0.dp, vertical = 18.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp)
+            ){
+
+                items(listSize){ index ->
+                    PostItem(index = index)
+                }
             }
         }
     }
 }
 
+//@Composable
+//fun PostList(){
+//    val listSize = 10
+//    val scrollState = rememberLazyListState()
+//    val coroutineScope = rememberCoroutineScope()
+//
+//
+//    LazyColumn(state = scrollState,
+//            contentPadding = PaddingValues(horizontal = 0.dp, vertical = 18.dp),
+//            verticalArrangement = Arrangement.spacedBy(18.dp)
+//        ){
+//            items(listSize){ index ->
+//                PostItem(index = index)
+//            }
+//        }
+//
+//}
+
+@Composable
+fun ProfileInfo(index:Int, mode : Int = 0){
+
+    //Box로 바꿩
+    Surface(
+        modifier = if (mode == 0) Modifier.size(24.dp) else Modifier.size(50.dp),
+        color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
+        shape = CircleShape
+    ) {
+        Image(painterResource(id = R.drawable.ic_food), contentDescription = "")
+    }
+    Spacer(if(mode==0) Modifier.width(8.dp) else Modifier.width(18.dp))
+    Column() {
+        Text(
+            "#$index eunseob",
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = if (mode == 0) 17.sp else 18.sp
+            )
+        )
+    }
+
+    // 비슷한 구조라서 메인이 post의 프로필인지, 프로필screen의 프로필인지에 따라 크기 변경
+    if(mode != 0){
+        // 프리미엄 요금제냐는 뜻 - 구독제를 쓰냐는 뜻
+        var tier = "p"
+        if(tier == "p") {
+            Spacer(Modifier.width(3.dp))
+            Surface(
+                modifier = Modifier.size(20.dp),
+                shape = CircleShape
+            ) {
+                Image(painterResource(id = R.drawable.ic_check_on), contentDescription = "")
+            }
+        }
+
+    }
+}
+
 @Composable
 fun PostItem(index: Int){
-
-    val isLiked = remember{ mutableStateOf(false) }
-
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -93,22 +161,8 @@ fun PostItem(index: Int){
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row() {
-
-                    Surface(
-                        modifier = Modifier.size(24.dp),
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
-                        shape = CircleShape
-                    ) {
-                        Image(painterResource(id = R.drawable.ic_animal), contentDescription = "")
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        "#$index eunseob",
-                        style = MaterialTheme.typography.subtitle1,
-                        fontSize = 17.sp
-                    )
+                    ProfileInfo(index = index, mode = 0)
                 }
-
                 // 기존 좋아요 아이콘
 //                IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(24.dp).bounceClick {  }) {
 //                    Icon(

@@ -1,5 +1,7 @@
 package com.plzgpt.lenzhub.api.dto
 
+import java.util.logging.Filter
+
 
 data class GetSearchCategoryPost(
     val post_id: Long,
@@ -13,4 +15,13 @@ data class GetSearchCategoryPost(
     val date: String,
     val likes: Int,
     val free: Boolean,
+)
+
+data class GetSearchLikeUser(
+    val user_id: Long,
+    val user_name: String,
+    val user_profile_img: String,
+    val filter: Int,
+    val likes: Int,
+    val free: Boolean
 )

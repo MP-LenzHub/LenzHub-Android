@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -35,6 +36,7 @@ import com.plzgpt.lenzhub.util.bounceClick
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+
 @Composable
 fun SearchMainScreen(navController: NavHostController) {
     val pagerState = rememberPagerState()
