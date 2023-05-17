@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
@@ -51,7 +52,7 @@ fun LenzMakeScreen (
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LenzMakeScreen.valueOf(
-        backStackEntry?.destination?.route ?: LenzMakeScreen.Picture.name
+        backStackEntry?.destination?.route ?: LenzMakeScreen.Maker.name
     )
     Scaffold (
         topBar = {
@@ -79,11 +80,21 @@ fun LenzMakeScreen (
                     fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.weight(1f))
+                if(currentScreen == LenzMakeScreen.Maker) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_photo_library),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .bounceClick {
+                                navController.navigate(route = LenzMakeScreen.Picture.name)
+                            }
+                    )
+                    Spacer(modifier = Modifier.height(18.dp))
+                }
             }
         }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
-        val context = LocalContext.current
 
         NavHost(
             navController = navController,
@@ -99,7 +110,7 @@ fun LenzMakeScreen (
                             context.contentResolver.openFileDescriptor(it, "r")?.fileDescriptor, null, null
                         ))
                                   },
-                    onNext = { navController.navigate(route = LenzMakeScreen.Result.name) }
+                    onNext = { navController.navigate(route = LenzMakeScreen.Maker.name) }
                 )
             }
             composable(route = LenzMakeScreen.Maker.name) {
@@ -113,7 +124,7 @@ fun LenzMakeScreen (
             }
             composable(route = LenzMakeScreen.Result.name) {
                 LenzMakeResult(
-                    onNext = { navController.navigate(route = LenzMakeScreen.Maker.name) }
+                    onNext = { context.finish() }
                 )
             }
         }

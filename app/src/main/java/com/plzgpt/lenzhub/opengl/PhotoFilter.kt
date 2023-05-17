@@ -16,6 +16,17 @@ import javax.microedition.khronos.opengles.GL10
 
 class PhotoFilter(context: Context, photo: Bitmap): GLSurfaceView.Renderer {
 
+    // create singleton
+    companion object {
+        private lateinit var instance: PhotoFilter
+        fun getInstance(context: Context, photo: Bitmap): PhotoFilter {
+            if (!::instance.isInitialized) {
+                instance = PhotoFilter(context, photo)
+            }
+            return instance
+        }
+    }
+
     private var photoWidth = context.resources.displayMetrics.widthPixels
     private var photoHeight = context.resources.displayMetrics.widthPixels
 
