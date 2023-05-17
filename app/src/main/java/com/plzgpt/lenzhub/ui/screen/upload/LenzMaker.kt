@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
+import android.provider.ContactsContract.Contacts.Photo
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -25,7 +26,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.gson.JsonObject
+import com.plzgpt.lenzhub.ApplicationClass.Companion.retrofit
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.api.RetrofitBuilder
+import com.plzgpt.lenzhub.api.RetrofitBuilder.signupAPI
+import com.plzgpt.lenzhub.api.api.SignInAPI
+import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
 import com.plzgpt.lenzhub.opengl.PhotoFilter
 import com.plzgpt.lenzhub.ui.theme.LHBackground
 import com.plzgpt.lenzhub.ui.theme.LHBlack
@@ -34,6 +41,11 @@ import com.plzgpt.lenzhub.ui.theme.LHPointAlpha
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.util.bounceClick
 import com.skydoves.landscapist.glide.GlideImage
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Callback
+import retrofit2.Call
+import retrofit2.Response
 import kotlin.math.roundToInt
 
 
@@ -60,14 +72,12 @@ fun LenzMaker(
     ) {
         val context = LocalContext.current
         val p: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_lenz_make)
-        var photoFilter = PhotoFilter(context, photo)
 
         AndroidView(
             factory = {
-                photoFilter = PhotoFilter(it, p)
                 GLSurfaceView(it).apply {
                     setEGLContextClientVersion(2)
-                    setRenderer(photoFilter)
+                    setRenderer(PhotoFilter.getInstance(it, photo))
                 }
             },
             modifier = Modifier
@@ -122,7 +132,7 @@ fun LenzMaker(
                 Button(
                     onClick = {
                         currentValue -= 0.01f
-                        photoFilter.setFilterValue(currentFilter.name, currentValue)
+                        PhotoFilter.getInstance(context, photo).setFilterValue(currentFilter.name, currentValue)
                     },
                     elevation = ButtonDefaults.elevation(0.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -137,7 +147,7 @@ fun LenzMaker(
                 Button(
                     onClick = {
                         currentValue += 0.01f
-                        photoFilter.setFilterValue(currentFilter.name, currentValue)
+                        PhotoFilter.getInstance(context, photo).setFilterValue(currentFilter.name, currentValue)
                     },
                     elevation = ButtonDefaults.elevation(0.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -211,12 +221,6 @@ fun LenzMaker(
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            GlideImage(
-                imageModel = photo,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(50.dp)
-            )
             LongButton(
                 text = "다음",
                 onClick = {
