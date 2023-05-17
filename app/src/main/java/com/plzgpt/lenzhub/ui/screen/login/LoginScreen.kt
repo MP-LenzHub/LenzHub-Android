@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.activity.MainActivity
 import com.plzgpt.lenzhub.ui.activity.SignInActivity
@@ -43,6 +44,9 @@ import com.plzgpt.lenzhub.util.bounceClick
 
 @Composable
 fun LoginScreen() {
+
+    val editor = sharedPreferences.edit()
+
     val textFieldId = remember { mutableStateOf("") }
     val isTextFieldFocusedId = remember { mutableStateOf(false) }
     val textFieldPw = remember { mutableStateOf("") }
