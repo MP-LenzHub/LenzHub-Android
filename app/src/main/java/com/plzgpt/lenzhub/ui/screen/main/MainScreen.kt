@@ -11,6 +11,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +30,7 @@ import com.plzgpt.lenzhub.ui.theme.LHDivider
 import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.plzgpt.lenzhub.ui.theme.LHLikeIcon
 import com.plzgpt.lenzhub.ui.theme.LHMainBackground
+import com.plzgpt.lenzhub.util.PostHeartCard
 import com.plzgpt.lenzhub.util.bounceClick
 
 @Preview
@@ -68,6 +71,9 @@ fun PostList(){
 
 @Composable
 fun PostItem(index: Int){
+
+    val isLiked = remember{ mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -103,14 +109,16 @@ fun PostItem(index: Int){
                     )
                 }
 
-                IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(24.dp).bounceClick {  }) {
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.ic_heart_solid
-                        ), contentDescription = null,
-                        tint = Color(0xFFFF6767)
-                    )
-                }
+                // 기존 좋아요 아이콘
+//                IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(24.dp).bounceClick {  }) {
+//                    Icon(
+//                        painter = painterResource(
+//                            id = R.drawable.ic_heart_solid
+//                        ), contentDescription = null,
+//                        tint = Color(0xFFFF6767)
+//                    )
+//                }
+                PostHeartCard(modifier = Modifier, heartState = isLiked)
             }
             Divider(color = LHDivider, thickness = 1.dp)
             Row(
@@ -125,7 +133,7 @@ fun PostItem(index: Int){
                 Surface(
                     modifier = Modifier
                         .size(150.dp)
-                        .bounceClick {  },
+                        .bounceClick { },
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
                     Image(painterResource(id = R.drawable.ic_home_ex1), contentDescription = "")
@@ -134,7 +142,7 @@ fun PostItem(index: Int){
                 Surface(
                     modifier = Modifier
                         .size(150.dp)
-                        .bounceClick {  },
+                        .bounceClick { },
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
                     Image(painterResource(id = R.drawable.ic_home_ex1), contentDescription = "")
