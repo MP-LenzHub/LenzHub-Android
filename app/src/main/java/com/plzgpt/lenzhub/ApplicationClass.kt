@@ -16,12 +16,13 @@ class ApplicationClass : Application() {
         lateinit var sharedPreferences: SharedPreferences
 
         lateinit var retrofit: Retrofit
+        val clientId = "Client ID"
     }
 
     override fun onCreate() {
         super.onCreate()
         sharedPreferences =
-            applicationContext.getSharedPreferences("GlobalSP", MODE_PRIVATE)
+            applicationContext.getSharedPreferences("LHPref", MODE_PRIVATE)
         // 레트로핏 인스턴스 생성
         // initRetrofitInstance()
     }
