@@ -20,6 +20,7 @@ interface SignInAPI {
 
     @GET("/api/user/login")
     fun login(
-        @Query("user") user: User
+        @Query("userId") userId: String,
+        @Query("password") password: String
     ): Call<LogInResponseDTO>
 }

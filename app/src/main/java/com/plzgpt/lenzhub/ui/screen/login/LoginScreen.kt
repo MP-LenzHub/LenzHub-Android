@@ -103,19 +103,19 @@ fun LoginScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .bounceClick {
-                        mContext.startActivity(
-                            Intent(mContext, MainActivity::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        )
+//                        mContext.startActivity(
+//                            Intent(mContext, MainActivity::class.java)
+//                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                        )
                         //테스트용
-                        
+
                         val loginUser = User(
                             textFieldId.value,textFieldPw.value
                         )
 
-                        RetrofitBuilder.signupAPI.login(loginUser)
+                        RetrofitBuilder.signupAPI.login(textFieldId.value,textFieldPw.value)
                             .enqueue(object : Callback<LogInResponseDTO> {
                                 override fun onResponse(
                                     call: Call<LogInResponseDTO>,
