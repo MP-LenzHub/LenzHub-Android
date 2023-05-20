@@ -158,17 +158,6 @@ fun FilterLike(filter : Int, like : Int){
             modifier = Modifier.bounceClick {  }
 
         ){
-            Surface(
-                modifier = Modifier.size(30.dp),
-                shape = CircleShape
-            ) {
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.ic_heart_solid
-                        ), contentDescription = null,
-                        tint = Color(0xFFFFC2CD)
-                    )
-                          }
             Spacer(Modifier.width(4.dp))
             Text(
                 "좋아요 : $filter",

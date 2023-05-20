@@ -65,7 +65,7 @@ fun ProfileInfo(profileData : GetSearchLikeUser){
                         modifier = Modifier.size(20.dp),
                         shape = CircleShape
                     ) {
-                        Image(painterResource(id = R.drawable.ic_check_on), contentDescription = "")
+                        Image(painterResource(id = R.drawable.ic_dollar), contentDescription = "")
                     }
                 }
 
