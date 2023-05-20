@@ -1,4 +1,4 @@
-package com.plzgpt.lenzhub.ui.screen.upload
+package com.plzgpt.lenzhub.ui.screen.lenz.viewmodel
 
 import android.graphics.Bitmap
 import android.net.Uri
@@ -20,6 +20,12 @@ class UploadViewModel: ViewModel() {
     fun setPictureBitmap(photoBitmap: Bitmap) {
         _uiState.value = _uiState.value.copy(
             photoBitmap = photoBitmap
+        )
+    }
+
+    fun setModifiedPicture(modifiedPhotoBitmap: Bitmap) {
+        _uiState.value = _uiState.value.copy(
+            modifiedPhotoBitmap = modifiedPhotoBitmap
         )
     }
 }

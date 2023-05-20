@@ -2,4 +2,5 @@
     <string name="app_name">LenzHub</string>
     <string name="title_activity_lenz_make">LenzMakeActivity</string>
     <string name="title_activity_lenz_apply">LenzApplyActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
