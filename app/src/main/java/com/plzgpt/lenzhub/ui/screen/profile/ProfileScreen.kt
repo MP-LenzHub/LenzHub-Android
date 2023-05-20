@@ -1,5 +1,7 @@
 package com.plzgpt.lenzhub.ui.screen.profile
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +23,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -33,6 +36,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.api.RetrofitBuilder
+import com.plzgpt.lenzhub.api.dto.GetUserInfoResponseDTO
+import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
 import com.plzgpt.lenzhub.ui.data.Category
 import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
 import com.plzgpt.lenzhub.ui.screen.main.ProfileInfo
@@ -46,11 +52,48 @@ import com.plzgpt.lenzhub.ui.theme.LHMainBackground
 import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 @Preview
 @Composable
-fun ProfileScreen() {
-    var myId = 100
+fun ProfileScreen(userIdx : Int) {
+    val mContext = LocalContext.current
+
+    val isUserInfo = remember { mutableStateOf(false) }
+
+
+    RetrofitBuilder.userAPI.userProfile(userIdx)
+        .enqueue(object : Callback<GetUserInfoResponseDTO> {
+            override fun onResponse(
+                call: Call<GetUserInfoResponseDTO>,
+                response: Response<GetUserInfoResponseDTO>
+            ) {
+                if (response.isSuccessful) {
+                    val res = response.body()
+                    if (res != null) {
+                        if (res.isSuccess) {
+                            isUserInfo.value = true
+                            Log.d("userInfo","성공")
+
+                            res.result.
+
+                        }
+                    }
+                }
+            }
+            override fun onFailure(
+                call: Call<GetUserInfoResponseDTO>,
+                t: Throwable
+            ) {
+                Toast.makeText(mContext, "서버가 응답하지 않아요", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+    var myId = userIdx
     var filter = 10
     var like = 12
     Box(

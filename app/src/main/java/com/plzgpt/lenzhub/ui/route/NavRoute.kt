@@ -163,7 +163,7 @@ fun NavigationGraphBNB(
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(slideOutDuration))
             }
         ) {
-            ProfileScreen()
+            ProfileScreen(77)
         }
     }
 }

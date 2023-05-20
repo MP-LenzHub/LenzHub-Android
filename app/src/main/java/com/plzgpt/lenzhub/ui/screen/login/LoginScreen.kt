@@ -1,6 +1,8 @@
 package com.plzgpt.lenzhub.ui.screen.login
 
 import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,8 +33,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.gson.JsonObject
 import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.api.RetrofitBuilder
+import com.plzgpt.lenzhub.api.dto.LogInResponseDTO
+import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
+import com.plzgpt.lenzhub.api.dto.User
 import com.plzgpt.lenzhub.ui.activity.MainActivity
 import com.plzgpt.lenzhub.ui.activity.SignInActivity
 import com.plzgpt.lenzhub.ui.theme.LHBlack
@@ -41,6 +48,13 @@ import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.util.EditText
 import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun LoginScreen() {
@@ -49,8 +63,13 @@ fun LoginScreen() {
 
     val textFieldId = remember { mutableStateOf("") }
     val isTextFieldFocusedId = remember { mutableStateOf(false) }
+
     val textFieldPw = remember { mutableStateOf("") }
     val isTextFieldFocusedPw = remember { mutableStateOf(false) }
+
+    val isLogin = remember { mutableStateOf(false) }
+
+
     val focusManager = LocalFocusManager.current
     val mContext = LocalContext.current
 
@@ -84,12 +103,45 @@ fun LoginScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .bounceClick {
-                        mContext.startActivity(
-                            Intent(mContext, MainActivity::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        val loginUser = User(
+                            textFieldId.value,textFieldPw.value
                         )
+
+                        RetrofitBuilder.signupAPI.login(loginUser)
+                            .enqueue(object : Callback<LogInResponseDTO> {
+                                override fun onResponse(
+                                    call: Call<LogInResponseDTO>,
+                                    response: Response<LogInResponseDTO>
+                                ) {
+                                    Log.d("login1",response.body().toString())
+
+                                    if (response.isSuccessful) {
+                                        val res = response.body()
+                                        if (res != null) {
+                                            if (res.isSuccess) {
+                                                isLogin.value = true
+                                                Log.d("login","성공")
+
+                                                Log.d("login",res.message)
+                                                Toast.makeText(mContext, res.result.success.toString(), Toast.LENGTH_SHORT).show()
+                                                mContext.startActivity(
+                                                    Intent(mContext, MainActivity::class.java)
+                                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                                override fun onFailure(
+                                    call: Call<LogInResponseDTO>,
+                                    t: Throwable
+                                ) {
+                                    Toast.makeText(mContext, "서버가 응답하지 않아요", Toast.LENGTH_SHORT).show()
+                                }
+
+                            })
                     },
                 backgroundColor = LHPoint,
                 shape = RoundedCornerShape(10.dp),
