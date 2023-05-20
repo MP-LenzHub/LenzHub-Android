@@ -38,7 +38,7 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(LHMainBackground)
-            .padding(12.dp)
+            .padding(start =12.dp, end = 12.dp, top = 12.dp, bottom = 0.dp)
 
     ) {
         PostList()
@@ -57,7 +57,7 @@ fun PostList(){
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(12.dp))
-        Text(text = "LenzHub", fontSize = 24.sp)
+        Text(text = "LenzHub", fontSize = 24.sp, style = TextStyle(fontWeight = FontWeight.Bold))
         Spacer(modifier = Modifier.height(12.dp))
 
 
@@ -132,7 +132,7 @@ fun ProfileInfo(index:Int, mode : Int = 0){
                 modifier = Modifier.size(20.dp),
                 shape = CircleShape
             ) {
-                Image(painterResource(id = R.drawable.ic_check_on), contentDescription = "")
+                Image(painterResource(id = R.drawable.ic_dollar), contentDescription = "")
             }
         }
 

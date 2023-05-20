@@ -10,3 +10,14 @@ data class SignInResponseDTO(
 data class SignInResult(
     val success: Boolean
 )
+
+data class LogInResponseDTO(
+    val code: Int,
+    val isSuccess: Boolean,
+    val message: String,
+    val result: SignInResult
+)
+
+data class LogInResult(
+    val success: Boolean
+)
