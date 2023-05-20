@@ -78,7 +78,6 @@ fun ProfileScreen(userIdx : Int) {
                             isUserInfo.value = true
                             Log.d("userInfo","성공")
 
-                            res.result.
 
                         }
                     }
