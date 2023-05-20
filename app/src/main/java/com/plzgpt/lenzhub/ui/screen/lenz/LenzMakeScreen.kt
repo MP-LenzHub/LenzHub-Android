@@ -1,11 +1,8 @@
-package com.plzgpt.lenzhub.ui.screen.upload
+package com.plzgpt.lenzhub.ui.screen.lenz
 
 import android.app.Activity
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.os.Build
-import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -20,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +29,7 @@ import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.util.bounceClick
 import androidx.lifecycle.viewmodel.compose.viewModel
-
+import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.UploadViewModel
 
 
 enum class LenzMakeScreen (val title: String) {
@@ -52,7 +48,7 @@ fun LenzMakeScreen (
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LenzMakeScreen.valueOf(
-        backStackEntry?.destination?.route ?: LenzMakeScreen.Maker.name
+        backStackEntry?.destination?.route ?: LenzMakeScreen.Picture.name
     )
     Scaffold (
         topBar = {
@@ -116,11 +112,18 @@ fun LenzMakeScreen (
             composable(route = LenzMakeScreen.Maker.name) {
                 LenzMaker(
                     photo = uiState.photoBitmap,
-                    onNext = { navController.navigate(route = LenzMakeScreen.Description.name) }
+                    onNext = {
+                        navController.navigate(route = LenzMakeScreen.Description.name)
+                        viewModel.setModifiedPicture(it)
+                    }
                 )
             }
             composable(route = LenzMakeScreen.Description.name) {
-                LenzDescription(viewModel)
+                LenzDescription(
+                    originPhoto = uiState.photoBitmap,
+                    modifiedPhoto = uiState.modifiedPhotoBitmap,
+                    onNext = { navController.navigate(route = LenzMakeScreen.Result.name) }
+                )
             }
             composable(route = LenzMakeScreen.Result.name) {
                 LenzMakeResult(

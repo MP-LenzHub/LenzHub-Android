@@ -10,9 +10,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -20,7 +18,7 @@ import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.screen.main.MainScreen
 import com.plzgpt.lenzhub.ui.screen.profile.ProfileScreen
 import com.plzgpt.lenzhub.ui.screen.search.SearchScreen
-import com.plzgpt.lenzhub.ui.screen.upload.UploadScreen
+import com.plzgpt.lenzhub.ui.screen.lenz.UploadScreen
 import kotlinx.coroutines.CoroutineScope
 
 enum class NAV_ROUTE_BNB(val routeName: String, val description: String, val icon: Int) { //main 패키지 루트.

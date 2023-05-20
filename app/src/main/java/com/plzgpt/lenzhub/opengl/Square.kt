@@ -1,9 +1,11 @@
 package com.plzgpt.lenzhub.opengl
 
+import android.graphics.Bitmap
 import android.opengl.GLES20
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
+import java.nio.IntBuffer
 
 class Square {
 
@@ -73,6 +75,14 @@ class Square {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
+    }
+
+    fun getBitmap(): Bitmap {
+        val bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        val buffer = IntBuffer.allocate(1)
+        GLES20.glReadPixels(0, 0, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer)
+        bitmap.setPixel(0, 0, buffer[0])
+        return bitmap
     }
 
     private fun initBuffers() {

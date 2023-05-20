@@ -1,5 +1,6 @@
-package com.plzgpt.lenzhub.ui.screen.upload
+package com.plzgpt.lenzhub.ui.screen.lenz
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -16,15 +17,22 @@ import androidx.compose.ui.unit.sp
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.UploadViewModel
 import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.ui.view.EditText
 import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun LenzDescription(viewModel: UploadViewModel) {
+fun LenzDescription(
+    originPhoto: Bitmap,
+    modifiedPhoto: Bitmap,
+    onNext: () -> Unit = {}
+) {
     var focusManager = LocalFocusManager.current
     var title = remember { mutableStateOf("") }
+    var description = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -49,6 +57,26 @@ fun LenzDescription(viewModel: UploadViewModel) {
                 .fillMaxWidth(),
             title = "",
             data = title,
+            isTextFieldFocused = remember { mutableStateOf(false) }
+        )
+        Spacer(modifier = Modifier.padding(top = 20.dp))
+        Text(
+            text = "제목",
+            modifier = Modifier
+                .padding(start = 18.dp),
+            style = TextStyle(
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp
+            )
+        )
+        Spacer(modifier = Modifier.padding(top = 18.dp))
+        EditText(
+            modifier = Modifier
+                .padding(horizontal = 18.dp)
+                .fillMaxWidth(),
+            title = "",
+            data = description,
             isTextFieldFocused = remember { mutableStateOf(false) }
         )
         Spacer(modifier = Modifier.padding(top = 20.dp))
@@ -79,6 +107,25 @@ fun LenzDescription(viewModel: UploadViewModel) {
             Spacer(modifier = Modifier.height(18.dp))
         }
         Spacer(modifier = Modifier.height(18.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp)
+        ) {
+            GlideImage(
+                imageModel = originPhoto,
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(1f)
+            )
+            Spacer(modifier = Modifier.width(18.dp))
+            GlideImage(
+                imageModel = modifiedPhoto,
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(1f)
+            )
+        }
         Spacer(modifier = Modifier.weight(1f))
         LongButton(
             text = "업로드",
@@ -86,6 +133,7 @@ fun LenzDescription(viewModel: UploadViewModel) {
                 // 렌즈 업로드 api
                 // 성공 시 결과 화면 후 메인
                 // 실패 시 메인 및 실패 메세지
+                onNext()
             }
         )
         Spacer(modifier = Modifier.height(18.dp))
