@@ -61,7 +61,7 @@ fun LenzDescription(
         )
         Spacer(modifier = Modifier.padding(top = 20.dp))
         Text(
-            text = "제목",
+            text = "렌즈 설명",
             modifier = Modifier
                 .padding(start = 18.dp),
             style = TextStyle(
