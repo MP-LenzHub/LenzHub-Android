@@ -130,8 +130,10 @@ fun LoginScreen() {
                                                 isLogin.value = true
                                                 Log.d("login","성공")
 
+
+
                                                 Log.d("login",res.message)
-                                                Toast.makeText(mContext, res.result.success.toString(), Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(mContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                                                 mContext.startActivity(
                                                     Intent(mContext, MainActivity::class.java)
                                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
