@@ -16,6 +16,7 @@ class ApplicationClass : Application() {
         lateinit var sharedPreferences: SharedPreferences
 
         lateinit var retrofit: Retrofit
+        var myId = 0
         val clientId = "Client ID"
     }
 
