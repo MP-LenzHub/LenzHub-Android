@@ -15,9 +15,9 @@ data class LogInResponseDTO(
     val code: Int,
     val isSuccess: Boolean,
     val message: String,
-    val result: SignInResult
+    val result: LogInResult
 )
 
 data class LogInResult(
-    val success: Boolean
+    val userId: Int
 )

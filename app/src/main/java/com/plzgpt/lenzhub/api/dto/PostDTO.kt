@@ -2,20 +2,27 @@ package com.plzgpt.lenzhub.api.dto
 
 import java.util.logging.Filter
 
-
-data class GetSearchCategoryPost(
-    val post_id: Long,
-    val user_id: Long,
-    val title: String,
-    val author: String,
-    val image: String,
-    val price: Int,
-    val user_profile_img: String,
-    val category_name: String,
-    val date: String,
-    val likes: Int,
-    val free: Boolean,
+data class CategorySearchResponseDTO(
+    val code: Int ?= null,
+    val isSuccess: Boolean ?= null,
+    val message: String ?= null,
+    val result: List<GetSearchCategoryPost> ?= null
 )
+data class GetSearchCategoryPost(
+    val id: Long,
+    val title: String,
+    val userName: String,
+    val profileImg: String,
+    val price: Int,
+    val category_name: Int,
+    val date: String,
+    val beforeFileName: String,
+    val afterFileName: String,
+    val beforeImg: String,
+    val afterImg: String,
+    val likedCount: Int
+)
+
 
 data class GetSearchLikeUser(
     val user_id: Long,
@@ -25,3 +32,6 @@ data class GetSearchLikeUser(
     val likes: Int,
     val free: Boolean
 )
+
+
+//data class GetBoard
