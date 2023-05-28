@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.gson.JsonObject
+import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
 import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.api.RetrofitBuilder
@@ -59,8 +60,6 @@ import retrofit2.Response
 @Composable
 fun LoginScreen() {
 
-    val editor = sharedPreferences.edit()
-
     val textFieldId = remember { mutableStateOf("") }
     val isTextFieldFocusedId = remember { mutableStateOf(false) }
 
@@ -68,6 +67,7 @@ fun LoginScreen() {
     val isTextFieldFocusedPw = remember { mutableStateOf(false) }
 
     val isLogin = remember { mutableStateOf(false) }
+    val editor = sharedPreferences.edit()
 
 
     val focusManager = LocalFocusManager.current
@@ -128,16 +128,18 @@ fun LoginScreen() {
                                         if (res != null) {
                                             if (res.isSuccess) {
                                                 isLogin.value = true
-                                                Log.d("login","성공")
 
-                                                Log.d("login",res.message)
-                                                Toast.makeText(mContext, res.result.success.toString(), Toast.LENGTH_SHORT).show()
+                                                editor.putInt(clientId, res.result.userId)
+
                                                 mContext.startActivity(
                                                     Intent(mContext, MainActivity::class.java)
                                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                                 )
+                                            }
+                                            else{
+                                                Toast.makeText(mContext, res.message, Toast.LENGTH_LONG).show()
                                             }
                                         }
                                     }
