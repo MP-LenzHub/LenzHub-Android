@@ -1,5 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.search
 
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -9,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
+import com.plzgpt.lenzhub.api.dto.CategorySearchResponseDTO
 import com.plzgpt.lenzhub.api.dto.GetSearchCategoryPost
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
@@ -36,12 +39,11 @@ import com.skydoves.landscapist.glide.GlideImage
 //포스트, 큐레이션에 표시되는 카드들로 데이터 형식 알려주면 그때 넣겠삼삼
 @Composable
 fun  SearchCategoryCard(
-    postData: GetSearchCategoryPost,
-//    postList: MutableState<GetSearchPost>
+    postData: GetSearchCategoryPost
 
 ) {
     val mContext = LocalContext.current
-    val likeCnt = remember { mutableStateOf(postData.likes) }
+    val likeCnt = remember { mutableStateOf(postData.likedCount) }
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.StartIntentSenderForResult()) {
@@ -90,7 +92,7 @@ fun  SearchCategoryCard(
         ) {
             //타이틀 이미지
             GlideImage( // CoilImage, FrescoImage
-                imageModel = postData.image,
+                imageModel = postData.afterImg,
                 modifier = Modifier
                     .size(width = 110.dp, height = 110.dp)
                     .clip(RoundedCornerShape(15.dp)),
@@ -140,10 +142,10 @@ fun  SearchCategoryCard(
             ) {
                 GlideImage(
                     imageModel =
-                    if(postData.user_profile_img == null)
+                    if(postData.profileImg == null)
                         R.drawable.ic_launcher_foreground
                     else
-                        postData.user_profile_img,
+                        postData.profileImg,
                     modifier = Modifier
                         .size(width = 20.dp, height = 20.dp)
                         .aspectRatio(1f)
@@ -166,7 +168,7 @@ fun  SearchCategoryCard(
                 Text(
                     modifier = Modifier
                         .padding(bottom = 3.dp),
-                    text = postData.author,
+                    text = postData.userName,
                     style = TextStyle(color = Color(0xFF252525).copy(alpha = 0.8f),
                         fontWeight = FontWeight(400),fontSize = 11.sp)
                 )
