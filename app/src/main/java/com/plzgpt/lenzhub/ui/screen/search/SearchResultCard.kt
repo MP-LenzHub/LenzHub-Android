@@ -42,10 +42,10 @@ fun SearchResultCard(
 
 ) {
     val mContext = LocalContext.current
-    val likeCnt = rememberSaveable{ mutableStateOf(postData.likes) }
+    val likeCnt = rememberSaveable{ mutableStateOf(postData.likedCount) }
 
     var price =  ""
-    if(postData.free) price =  "무료"
+    if(postData.likedCount > 0) price =  "무료"
     else price =  "유료"
 
     val launcher = rememberLauncherForActivityResult(contract =
@@ -95,7 +95,7 @@ fun SearchResultCard(
         ) {
             //타이틀 이미지
             GlideImage( // CoilImage, FrescoImage
-                imageModel = postData.image,
+                imageModel = postData.afterImg,
                 modifier = Modifier
                     .size(width = 110.dp, height = 110.dp)
                     .clip(RoundedCornerShape(15.dp)),
@@ -145,10 +145,10 @@ fun SearchResultCard(
             ) {
                 GlideImage(
                     imageModel =
-                    if(postData.user_profile_img == null)
+                    if(postData.profileImg == null)
                         R.drawable.ic_launcher_foreground
                     else
-                        postData.user_profile_img,
+                        postData.profileImg,
                     modifier = Modifier
                         .size(width = 20.dp, height = 20.dp)
                         .aspectRatio(1f)
@@ -171,7 +171,7 @@ fun SearchResultCard(
                 Text(
                     modifier = Modifier
                         .padding(bottom = 3.dp),
-                    text = postData.author,
+                    text = postData.userName,
                     style = TextStyle(color = Color(0xFF252525).copy(alpha = 0.8f),
                         fontWeight = FontWeight(400),fontSize = 11.sp)
                 )

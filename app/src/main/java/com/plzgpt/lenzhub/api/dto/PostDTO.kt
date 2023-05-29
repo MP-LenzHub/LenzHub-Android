@@ -14,7 +14,7 @@ data class GetSearchCategoryPost(
     val userName: String,
     val profileImg: String,
     val price: Int,
-    val category_name: Int,
+    val category_name: String,
     val date: String,
     val beforeFileName: String,
     val afterFileName: String,
