@@ -66,14 +66,14 @@ fun LenzPostDetailScreen(
                 .padding(horizontal = 18.dp)
         ) {
             GlideImage(
-                imageModel = uiState.originalPhoto,
+                imageModel = uiState.beforeImg,
                 modifier = Modifier
                     .weight(6f)
                     .aspectRatio(1f)
             )
             Spacer(modifier = Modifier.weight(1f))
             GlideImage(
-                imageModel = uiState.modifiedPhoto,
+                imageModel = uiState.afterImg,
                 modifier = Modifier
                     .weight(6f)
                     .aspectRatio(1f)

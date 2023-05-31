@@ -187,7 +187,7 @@ fun PostItem(index: Int, post: PostUiState){
                         .size(150.dp),
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
-                    GlideImage(imageModel = post.originalPhoto.toUri(), contentDescription = "original")
+                    GlideImage(imageModel = post.beforeImg.toUri(), contentDescription = "original")
                 }
 
                 Surface(
@@ -195,7 +195,7 @@ fun PostItem(index: Int, post: PostUiState){
                         .size(150.dp),
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
-                    GlideImage(imageModel = post.modifiedPhoto.toUri(), contentDescription = "original")
+                    GlideImage(imageModel = post.afterImg.toUri(), contentDescription = "original")
                 }
             }
 

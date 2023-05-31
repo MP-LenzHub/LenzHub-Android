@@ -23,8 +23,8 @@ data class PostUiState(
     val price: Int = 0,
     val category_name: String = "풍경",
     val date: String = "2021-09-01",
-    val originalPhoto: String = "",
-    val modifiedPhoto: String = "",
+    val beforeImg: String = "",
+    val afterImg: String = "",
     val lenzBasicInfoDto: LenzBasicInfoDto = LenzBasicInfoDto(),
     val likedCount: Int = 0,
 )
@@ -50,8 +50,8 @@ class PostViewModel : ViewModel() {
                 price = result.price,
                 category_name = result.category_name,
                 date = result.date,
-                originalPhoto = result.originalPhoto,
-                modifiedPhoto = result.modifiedPhoto,
+                beforeImg = result.beforeImg,
+                afterImg = result.afterImg,
                 lenzBasicInfoDto = result.lenzBasicInfoDto,
                 likedCount = result.likedCount
             )
