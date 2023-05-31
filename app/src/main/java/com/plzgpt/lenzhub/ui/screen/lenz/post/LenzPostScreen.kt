@@ -38,6 +38,7 @@ enum class LenzPostScreen (val title: String) {
 @Composable
 fun LenzPostScreen(
     context: Activity,
+    postId: Int = 0,
     viewModel: PostViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -45,6 +46,7 @@ fun LenzPostScreen(
     val currentScreen = LenzPostScreen.valueOf(
         backStackEntry?.destination?.route ?: LenzPostScreen.Post.name
     )
+
     Scaffold (
         topBar = {
             TopAppBar(
@@ -75,6 +77,7 @@ fun LenzPostScreen(
         }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
+        viewModel.getPostUiState(postId)
 
         NavHost(
             navController = navController,

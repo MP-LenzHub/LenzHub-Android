@@ -1,5 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.lenz.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plzgpt.lenzhub.api.RetrofitBuilder
@@ -16,14 +17,14 @@ import kotlinx.coroutines.withContext
 data class PostUiState(
     val id: Int = 0,
     val title: String = "렌즈명",
-    val username: String = "제작자 이름",
+    val userName: String = "제작자 이름",
     val profileImg: String = "",
     val description: String = "렌즈 설명",
     val price: Int = 0,
     val category_name: String = "풍경",
     val date: String = "2021-09-01",
-    val originalPhoto: String = "",
-    val modifiedPhoto: String = "",
+    val beforeImg: String = "",
+    val afterImg: String = "",
     val lenzBasicInfoDto: LenzBasicInfoDto = LenzBasicInfoDto(),
     val likedCount: Int = 0,
 )
@@ -37,20 +38,20 @@ class PostViewModel : ViewModel() {
 
 
     // 포스트 내용 요청
-    fun getPostUiState(id: Int, size: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun getPostUiState(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         val result = postRepository.getPost(id)
         _uiState.update {
             it.copy(
                 id = result.id,
                 title = result.title,
-                username = result.username,
-                profileImg = result.profileImg,
+                userName = result.userName,
+                profileImg = result.profileImg ?: "",
                 description = result.description,
                 price = result.price,
                 category_name = result.category_name,
                 date = result.date,
-                originalPhoto = result.originalPhoto,
-                modifiedPhoto = result.modifiedPhoto,
+                beforeImg = result.beforeImg,
+                afterImg = result.afterImg,
                 lenzBasicInfoDto = result.lenzBasicInfoDto,
                 likedCount = result.likedCount
             )
@@ -73,7 +74,13 @@ class PostRepository {
     }
 
     suspend fun getPost(id: Int): PostUiState = withContext(Dispatchers.IO) {
-        RetrofitBuilder.lenzAPI.postGet(id).execute().body()?.result ?: PostUiState()
+        val response = RetrofitBuilder.lenzAPI.postGet(id).execute()
+
+        Log.d("PostRepository", "getPost: $id")
+        Log.d("PostRepository", "getPost: $response")
+        Log.d("PostRepository", "getPost: ${response.body()}")
+
+        response.body()?.result ?: PostUiState()
     }
 
     suspend fun savePost(userId: Int, postId: Int): PostSaveResResult = withContext(Dispatchers.IO) {

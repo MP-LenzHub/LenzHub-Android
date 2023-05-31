@@ -1,6 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.main
 
-import android.util.Log
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -30,9 +31,9 @@ import com.plzgpt.lenzhub.ApplicationClass
 import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.api.dto.GetSearchCategoryPost
+import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostActivity
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.HomeViewModel
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
-import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostViewModel
 import com.plzgpt.lenzhub.ui.theme.LHDivider
 import com.plzgpt.lenzhub.ui.theme.LHMainBackground
 import com.plzgpt.lenzhub.util.PostHeartCard
@@ -95,11 +96,9 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
             contentPadding = PaddingValues(horizontal = 0.dp, vertical = 18.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            Log.d("PostList", "PostList: ${posts.postList}")
 
             items(items = posts.postList, key ={it.id}){
                 PostItem(index = it.id, post = it)
-                Log.d("PostList", "PostList: ${it.id}")
             }
         }
     }
@@ -158,16 +157,19 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
     val isLiked = remember { mutableStateOf(false) } // 좋아요 했는지 여부
     val userName = post.userName
     val userImage = post.profileImg
+    val context = LocalContext.current
 
-
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .bounceClick { isLiked.value = !isLiked.value },
-            elevation = 4.dp,
-            shape = RoundedCornerShape(20.dp)
-        ) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .bounceClick {
+                val intent = Intent(context, LenzPostActivity::class.java)
+                intent.putExtra("postId", post.id)
+                context.startActivity(intent)
+                isLiked.value = !isLiked.value },
+        elevation = 4.dp,
+        shape = RoundedCornerShape(20.dp)
+    ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

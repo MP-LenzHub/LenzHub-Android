@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
 import com.plzgpt.lenzhub.ui.theme.LHBackground
 import com.plzgpt.lenzhub.ui.theme.LHBlack
@@ -50,7 +49,7 @@ fun LenzPostDetailScreen(
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = uiState.username,
+                text = uiState.userName,
                 style = TextStyle(
                     color = LHBlack,
                     fontSize = 16.sp,
@@ -67,14 +66,14 @@ fun LenzPostDetailScreen(
                 .padding(horizontal = 18.dp)
         ) {
             GlideImage(
-                imageModel = uiState.originalPhoto,
+                imageModel = uiState.beforeImg,
                 modifier = Modifier
                     .weight(6f)
                     .aspectRatio(1f)
             )
             Spacer(modifier = Modifier.weight(1f))
             GlideImage(
-                imageModel = uiState.modifiedPhoto,
+                imageModel = uiState.afterImg,
                 modifier = Modifier
                     .weight(6f)
                     .aspectRatio(1f)
