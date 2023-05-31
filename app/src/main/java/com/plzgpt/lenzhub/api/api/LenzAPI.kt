@@ -40,4 +40,10 @@ interface LenzAPI {
     fun postGetSaved(
         @Path("userId") userId: Int
     ): Call<PostGetSavedRes>
+
+    @GET("/api/board")
+    fun postGetAll(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<PostGetAllRes>
 }

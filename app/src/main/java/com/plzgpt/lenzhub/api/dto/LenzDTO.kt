@@ -1,5 +1,6 @@
 package com.plzgpt.lenzhub.api.dto
 
+import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostAllState
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
 
 data class PostCreateReqDto(
@@ -58,5 +59,16 @@ data class PostGetSavedRes(
 )
 
 data class PostGetSavedResResult(
+    val postList: List<PostUiState> = listOf()
+)
+
+data class PostGetAllRes(
+    val code: Int,
+    val isSuccess: Boolean,
+    val message: String,
+    val result: PostAllState
+)
+
+data class PostAllState(
     val postList: List<PostUiState> = listOf()
 )
