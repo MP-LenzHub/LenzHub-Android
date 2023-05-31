@@ -1,18 +1,21 @@
 package com.plzgpt.lenzhub.api.dto
 
-import java.util.logging.Filter
-
-data class CategorySearchResponseDTO(
+data class SearchResponseDTO(
     val code: Int ?= null,
     val isSuccess: Boolean ?= null,
     val message: String ?= null,
-    val result: List<GetSearchCategoryPost> ?= null
+    val result: PostListDto ?=  null
 )
+data class PostListDto(
+    val postList: ArrayList<GetSearchCategoryPost>
+)
+
 data class GetSearchCategoryPost(
-    val id: Long,
+    val id: Int,
     val title: String,
     val userName: String,
     val profileImg: String,
+    val description: String,
     val price: Int,
     val category_name: String,
     val date: String,
@@ -20,6 +23,7 @@ data class GetSearchCategoryPost(
     val afterFileName: String,
     val beforeImg: String,
     val afterImg: String,
+    val lenzBasicInfoDto: LenzBasicInfoDto,
     val likedCount: Int
 )
 
