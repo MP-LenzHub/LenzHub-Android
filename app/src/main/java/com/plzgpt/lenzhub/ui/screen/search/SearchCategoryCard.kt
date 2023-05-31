@@ -1,6 +1,5 @@
 package com.plzgpt.lenzhub.ui.screen.search
 
-import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -10,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,7 +25,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
-import com.plzgpt.lenzhub.api.dto.CategorySearchResponseDTO
 import com.plzgpt.lenzhub.api.dto.GetSearchCategoryPost
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
@@ -120,7 +117,7 @@ fun  SearchCategoryCard(
                 text = postData.title,
                 style = TextStyle(color = LHBlack,
                     fontWeight = FontWeight(500),
-                    fontSize = 14.sp),
+                    fontSize = 16.sp),
                 //넘치면 ....으로 표시해주는놈
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2
@@ -132,7 +129,7 @@ fun  SearchCategoryCard(
             val timeLine = postData.date.split("T")[0].split("-")
             Text(text = "${timeLine[0]}년 ${timeLine[1]}월 ${timeLine[2]}일",
                 style = TextStyle(color = LHGray,
-                    fontWeight = FontWeight(400),fontSize = 11.sp)
+                    fontWeight = FontWeight(400),fontSize = 12.sp)
             )
 
             Spacer(modifier = Modifier.height(7.dp))
@@ -170,7 +167,7 @@ fun  SearchCategoryCard(
                         .padding(bottom = 3.dp),
                     text = postData.userName,
                     style = TextStyle(color = Color(0xFF252525).copy(alpha = 0.8f),
-                        fontWeight = FontWeight(400),fontSize = 11.sp)
+                        fontWeight = FontWeight(400),fontSize = 12.sp)
                 )
 
             }
@@ -180,7 +177,15 @@ fun  SearchCategoryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.weight(1f))
-
+                if(postData.price > 0) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_dollar),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(width = 22.dp, height = 22.dp)
+                            .padding(end = 6.dp)
+                    )
+                }
                 Image(
                     painter = painterResource(id = R.drawable.ic_heart_mini),
                     contentDescription = null,

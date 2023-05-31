@@ -139,43 +139,55 @@ fun SignInScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .bounceClick {
-                        val jsonObject = JsonObject().apply {
-                            addProperty("name", textFieldName.value)
-                            addProperty("userId", textFieldId.value)
-                            addProperty("password", textFieldCheckPw.value)
-                        }
-                        val mediaType = "application/json; charset=utf-8".toMediaType()
-                        val body = jsonObject.toString().toRequestBody(mediaType)
-                        val requestBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), jsonObject.toString())
-                        Log.d("signin",requestBody.toString())
-                        signupAPI.signIn(body)
-                            .enqueue(object : Callback<SignInResponseDTO> {
-                                override fun onResponse(
-                                    call: Call<SignInResponseDTO>,
-                                    response: Response<SignInResponseDTO>
-                                ) {
-                                    if (response.isSuccessful) {
-                                        val res = response.body()
-                                        if (res != null) {
-                                            if (res.isSuccess) {
-                                                isSignIn.value = true
-                                                Log.d("signin","성공")
+                        if (textFieldPw.value != textFieldCheckPw.value) {
+                            Toast.makeText(mContext, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                        } else {
 
-                                                Log.d("signin",res.message)
-                                                Toast.makeText(mContext, res.result.success.toString(), Toast.LENGTH_SHORT).show()
+
+                            val jsonObject = JsonObject().apply {
+                                addProperty("name", textFieldName.value)
+                                addProperty("userId", textFieldId.value)
+                                addProperty("password", textFieldCheckPw.value)
+                            }
+                            val mediaType = "application/json; charset=utf-8".toMediaType()
+                            val body = jsonObject.toString().toRequestBody(mediaType)
+                            val requestBody = RequestBody.create(
+                                "application/json; charset=utf-8".toMediaTypeOrNull(),
+                                jsonObject.toString()
+                            )
+                            Log.d("signin", requestBody.toString())
+                            signupAPI.signIn(body)
+                                .enqueue(object : Callback<SignInResponseDTO> {
+                                    override fun onResponse(
+                                        call: Call<SignInResponseDTO>,
+                                        response: Response<SignInResponseDTO>
+                                    ) {
+                                        if (response.isSuccessful) {
+                                            val res = response.body()
+                                            if (res != null) {
+                                                if (res.isSuccess) {
+                                                    isSignIn.value = true
+                                                } else {
+                                                    Toast.makeText(
+                                                        mContext,
+                                                        res.message,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                override fun onFailure(
-                                    call: Call<SignInResponseDTO>,
-                                    t: Throwable
-                                ) {
-                                    Toast.makeText(mContext, "서버가 응답하지 않아요", Toast.LENGTH_SHORT).show()
-                                }
 
-                            })
+                                    override fun onFailure(
+                                        call: Call<SignInResponseDTO>,
+                                        t: Throwable
+                                    ) {
+                                        Toast.makeText(mContext, "서버가 응답하지 않아요", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
 
+                                })
+                        }
                     },
                 backgroundColor = LHPoint,
                 shape = RoundedCornerShape(10.dp),
