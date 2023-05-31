@@ -33,9 +33,6 @@ class PostViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(PostUiState())
     val uiState: StateFlow<PostUiState> = _uiState.asStateFlow()
 
-    private val _allPostState = MutableStateFlow(PostAllState())
-    val allPostState: StateFlow<PostAllState> = _allPostState.asStateFlow()
-
     private val postRepository = PostRepository.getInstance()
 
 

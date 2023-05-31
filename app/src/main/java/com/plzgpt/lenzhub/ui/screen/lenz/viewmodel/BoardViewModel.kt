@@ -3,6 +3,7 @@ package com.plzgpt.lenzhub.ui.screen.lenz.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plzgpt.lenzhub.api.RetrofitBuilder
+import com.plzgpt.lenzhub.api.dto.PostListDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,14 +12,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-data class PostAllState(
-    val postList: ArrayList<PostUiState> = arrayListOf()
-)
-
 class HomeViewModel : ViewModel() {
 
-    private val _allPostState = MutableStateFlow(PostAllState())
-    val allPostState: StateFlow<PostAllState> = _allPostState.asStateFlow()
+    private val _allPostState = MutableStateFlow(PostListDto())
+    val allPostState: StateFlow<PostListDto> = _allPostState.asStateFlow()
 
     private val boardRepository = BoardRepository.getInstance()
 
@@ -42,7 +39,7 @@ class BoardRepository {
         }
     }
 
-    suspend fun getAllPost(page: Int, size:Int): PostAllState = withContext(Dispatchers.IO) {
-        RetrofitBuilder.boardAPI.postGetAll(page, size).execute().body()?.result ?: PostAllState()
+    suspend fun getAllPost(page: Int, size:Int): PostListDto = withContext(Dispatchers.IO) {
+        RetrofitBuilder.boardAPI.postGetAll().execute().body()?.result?: PostListDto()
     }
 }
