@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.gson.JsonObject
+import com.plzgpt.lenzhub.ApplicationClass.Companion.myId
 import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.api.RetrofitBuilder
@@ -129,6 +130,7 @@ fun LoginScreen() {
                                             if (res.isSuccess) {
                                                 isLogin.value = true
                                                 Log.d("login","성공")
+                                                myId =res.result.userId
 
 
 
