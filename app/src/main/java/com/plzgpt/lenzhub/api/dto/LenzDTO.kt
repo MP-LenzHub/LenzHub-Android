@@ -59,7 +59,7 @@ data class PostGetSavedRes(
 )
 
 data class PostGetSavedResResult(
-    val postList: List<PostUiState> = listOf()
+    val postList: ArrayList<PostUiState> = arrayListOf()
 )
 
 data class PostGetAllRes(

@@ -1,6 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.main
 
-import android.util.Log
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,9 +25,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.plzgpt.lenzhub.ApplicationClass
 import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostActivity
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.HomeViewModel
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
-import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostViewModel
 import com.plzgpt.lenzhub.ui.theme.LHDivider
 import com.plzgpt.lenzhub.ui.theme.LHMainBackground
 import com.plzgpt.lenzhub.util.PostHeartCard
@@ -138,14 +139,19 @@ fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:S
 fun PostItem(index: Int, post: PostUiState){
 
     val isLiked = remember { mutableStateOf(false) } // 좋아요 했는지 여부
-    val userName = post.username
+    val userName = post.userName
     val userImage = post.profileImg
+    val context = LocalContext.current
 
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .bounceClick { isLiked.value = !isLiked.value },
+            .bounceClick {
+                val intent = Intent(context, LenzPostActivity::class.java)
+                intent.putExtra("postId", post.id)
+                context.startActivity(intent)
+                isLiked.value = !isLiked.value },
         elevation = 4.dp,
         shape = RoundedCornerShape(20.dp)
     ) {

@@ -25,7 +25,7 @@ interface LenzAPI {
         @Part afterImage: MultipartBody.Part?
     ): Call<PostCreateRes>
 
-    @GET("/api/board/{postId}")
+    @GET("/api/board/{postId}/detailed")
     fun postGet(
         @Path("postId") postId: Int
     ): Call<PostGetRes>
