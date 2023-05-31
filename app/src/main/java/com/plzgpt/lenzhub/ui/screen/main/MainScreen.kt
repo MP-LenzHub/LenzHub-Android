@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,6 +63,12 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
     val postAllState by viewModel.allPostState.collectAsState()
     val postList = postAllState.postList
 
+    val fontFamily = FontFamily(
+        Font(R.font.seoul_hangang, FontWeight.Light),
+        Font(R.font.seoul_hangang_bl, FontWeight.Bold),
+
+    )
+
 
     Column(
         modifier = Modifier
@@ -68,7 +76,7 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(12.dp))
-        Text(text = "LenzHub", fontSize = 24.sp, style = TextStyle(fontWeight = FontWeight.Bold))
+        Text(text = "LenzHub", fontFamily = fontFamily, fontSize = 24.sp, style = TextStyle(fontWeight = FontWeight.Bold))
         Spacer(modifier = Modifier.height(12.dp))
 
 
@@ -102,7 +110,11 @@ fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:S
         color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
         shape = CircleShape
     ) {
-        Image(painterResource(id = R.drawable.ic_food), contentDescription = "")
+        GlideImage(
+            imageModel = userImage,
+            contentDescription = "",
+            modifier = Modifier.size(20.dp)
+        )
     }
     Spacer(if(mode==0) Modifier.width(8.dp) else Modifier.width(18.dp))
     Column() {
@@ -113,24 +125,20 @@ fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:S
             )
         )
     }
-
-    // 비슷한 구조라서 메인이 post의 프로필인지, 프로필screen의 프로필인지에 따라 크기 변경
-    if(mode != 0){
-        // 프리미엄 요금제냐는 뜻 - 구독제를 쓰냐는 뜻
-        if(price != 0) {
-            Spacer(Modifier.width(3.dp))
-            Surface(
-                modifier = Modifier.size(20.dp),
-                shape = CircleShape
-            ) {
-                GlideImage(
-                    imageModel = userImage,
-                    contentDescription = "",
-                    modifier = Modifier.size(20.dp)
-                )
+    Row( verticalAlignment = Alignment.CenterVertically) {
+        // 비슷한 구조라서 메인이 post의 프로필인지, 프로필screen의 프로필인지에 따라 크기 변경
+        if (mode != 0 || true) {
+            // 프리미엄 요금제냐는 뜻 - 구독제를 쓰냐는 뜻
+            if (price != 0) {
+                Spacer(Modifier.width(3.dp))
+                Surface(
+                    modifier = Modifier.size(20.dp),
+                    shape = CircleShape
+                ) {
+                    Image(painterResource(id = R.drawable.ic_check_on), contentDescription = "")
+                }
             }
         }
-
     }
 }
 
