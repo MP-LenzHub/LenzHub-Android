@@ -19,5 +19,5 @@ data class LogInResponseDTO(
 )
 
 data class LogInResult(
-    val userId: Int = 0
+    val userId: Int
 )

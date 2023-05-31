@@ -3,6 +3,8 @@ package com.plzgpt.lenzhub.ui.screen.lenz
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -25,20 +27,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.api.dto.LenzBasicInfoDto
 import com.plzgpt.lenzhub.opengl.PhotoFilter
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.Lenz
+import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
 import com.plzgpt.lenzhub.ui.theme.LHBackground
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.util.bounceClick
+import retrofit2.http.POST
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun LenzApplier(
     photo: Bitmap = BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.ic_lenz_apply),
     onNext: (Bitmap) -> Unit = {},
-    lenzList: List<Lenz> = listOf(Lenz(name = "렌즈1"), Lenz(name = "렌즈2"), Lenz(name = "렌즈3"))
+    lenzList: List<PostUiState> = listOf(PostUiState())
 ) {
     Column(
         // width == height
@@ -73,15 +79,22 @@ fun LenzApplier(
                 modifier = Modifier
                     .weight(1f)
             ) {
-                items(items = lenzList, key = { it.name }) { lenz ->
-                    LenzListItem(lenz, currentLenz)
+                items(items = lenzList, key = { it.id }) { lenz ->
+                    LenzListItem(
+                        lenz = lenz,
+                        currentLenz = currentLenz,
+                        setParameters = {
+                            PhotoFilter.getInstance(context, photo).setAllValue(it)
+                        })
                 }
             }
             Spacer(modifier = Modifier.height(18.dp))
             LongButton(
                 text = "다음",
                 onClick = {
-                    onNext(PhotoFilter.getInstance(context, photo).getModifiedPhoto())
+                    val modifiedPhoto = PhotoFilter.getInstance(context, photo).getModifiedPhoto()
+                    saveImageOnAboveAndroidQ(context.contentResolver, modifiedPhoto)
+                    onNext(modifiedPhoto)
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -94,8 +107,9 @@ fun LenzApplier(
 @Preview
 @Composable
 fun LenzListItem(
-    lenz: Lenz = Lenz(),
-    currentLenz: MutableState<Lenz> = mutableStateOf(Lenz())
+    lenz: PostUiState = PostUiState(),
+    currentLenz: MutableState<PostUiState> = mutableStateOf(PostUiState()),
+    setParameters: (LenzBasicInfoDto) -> Unit = {}
 ) {
     Card(
         elevation = 10.dp,
@@ -105,10 +119,11 @@ fun LenzListItem(
             .clip(RoundedCornerShape(20.dp))
             .bounceClick {
                 currentLenz.value = lenz
+                setParameters(lenz.lenzBasicInfoDto)
             }
             .border(
                 width = 1.dp,
-                color = if (lenz.name == currentLenz.value.name) LHPoint else LHBackground,
+                color = if (lenz.id == currentLenz.value.id) LHPoint else LHBackground,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
@@ -119,7 +134,7 @@ fun LenzListItem(
         ) {
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = lenz.name,
+                text = lenz.title,
                 style = TextStyle(
                     color = LHBlack,
                     fontSize = 20.sp,
@@ -130,7 +145,7 @@ fun LenzListItem(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = lenz.categories.joinToString(", "),
+                text = lenz.category_name,
                 style = TextStyle(
                     color = LHGray,
                     fontSize = 12.sp,

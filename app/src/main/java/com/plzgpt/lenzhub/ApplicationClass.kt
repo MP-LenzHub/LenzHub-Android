@@ -16,7 +16,6 @@ class ApplicationClass : Application() {
         lateinit var sharedPreferences: SharedPreferences
 
         lateinit var retrofit: Retrofit
-        var myId = 0
         val clientId = "Client ID"
     }
 
@@ -25,7 +24,7 @@ class ApplicationClass : Application() {
         sharedPreferences =
             applicationContext.getSharedPreferences("LHPref", MODE_PRIVATE)
 //         레트로핏 인스턴스 생성
-         initRetrofitInstance()
+        initRetrofitInstance()
     }
 
     private fun initRetrofitInstance() {

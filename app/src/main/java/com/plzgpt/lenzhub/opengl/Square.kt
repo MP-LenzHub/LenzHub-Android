@@ -70,7 +70,13 @@ class Square {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
         GLES20.glUniform1i(textureHandle, 0)
 
-        GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, verticesBuffer)
+        GLES20.glVertexAttribPointer(
+            positionHandle,
+            2,
+            GLES20.GL_FLOAT,
+            false,
+            0,
+            verticesBuffer)
         GLES20.glEnableVertexAttribArray(positionHandle)
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
