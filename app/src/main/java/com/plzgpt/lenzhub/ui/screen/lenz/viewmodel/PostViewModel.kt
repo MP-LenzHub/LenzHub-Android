@@ -28,15 +28,6 @@ data class PostUiState(
     val likedCount: Int = 0,
 )
 
-data class PostAllState(
-    val postList: ArrayList<PostUiState> = arrayListOf()
-)
-
-data class PostList(
-    val postList: ArrayList<PostUiState> = arrayListOf()
-)
-
-
 
 class PostViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(PostUiState())
@@ -47,18 +38,9 @@ class PostViewModel : ViewModel() {
 
     private val postRepository = PostRepository.getInstance()
 
-    // 포스트 전체
-    fun getAllPostState(page: Int, size: Int) = viewModelScope.launch(Dispatchers.IO) {
-        val result = postRepository.getAllPost(page, size)
-        _allPostState.update {
-            it.copy(
-                postList = result.postList
-            )
-        }
-    }
 
     // 포스트 내용 요청
-    fun getPostUiState(id: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun getPostUiState(id: Int, size: Int) = viewModelScope.launch(Dispatchers.IO) {
         val result = postRepository.getPost(id)
         _uiState.update {
             it.copy(
@@ -101,7 +83,5 @@ class PostRepository {
         RetrofitBuilder.lenzAPI.postSave(userId, postId).execute().body()?.result ?: PostSaveResResult()
     }
 
-    suspend fun getAllPost(page: Int, size:Int): PostAllState = withContext(Dispatchers.IO) {
-        RetrofitBuilder.lenzAPI.postGetAll(page, size).execute().body()?.result ?: PostAllState()
-    }
+
 }

@@ -1,5 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.main
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,11 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bumptech.glide.Glide
 import com.plzgpt.lenzhub.ApplicationClass
 import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
 import com.plzgpt.lenzhub.R
-import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostAllState
+import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.HomeViewModel
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostViewModel
 import com.plzgpt.lenzhub.ui.theme.LHDivider
@@ -32,13 +32,12 @@ import com.plzgpt.lenzhub.ui.theme.LHMainBackground
 import com.plzgpt.lenzhub.util.PostHeartCard
 import com.plzgpt.lenzhub.util.bounceClick
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.Job
 
 @Preview
 @Composable
 fun MainScreen(
 
-    viewModel: PostViewModel = viewModel(),
+    viewModel: HomeViewModel = viewModel(),
 
     ) {
     val userId = ApplicationClass.sharedPreferences.getInt(clientId, 0)
@@ -55,13 +54,11 @@ fun MainScreen(
 }
 
 @Composable
-fun PostList(viewModel:PostViewModel, userId:Int) {
+fun PostList(viewModel: HomeViewModel, userId:Int) {
     val page = 0
     val size = 10
     viewModel.getAllPostState(page, size)
-    val postUiState by viewModel.uiState.collectAsState()
     val postAllState by viewModel.allPostState.collectAsState()
-
     val postList = postAllState.postList
 
 
@@ -75,7 +72,6 @@ fun PostList(viewModel:PostViewModel, userId:Int) {
         Spacer(modifier = Modifier.height(12.dp))
 
 
-        val listSize = postUiState
 
         val scrollState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
@@ -97,7 +93,7 @@ fun PostList(viewModel:PostViewModel, userId:Int) {
 }
 
 @Composable
-fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:String = "") {
+fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:String = "", price: Int = 0) {
 
 
 //Box로 바꿩
@@ -121,8 +117,7 @@ fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:S
     // 비슷한 구조라서 메인이 post의 프로필인지, 프로필screen의 프로필인지에 따라 크기 변경
     if(mode != 0){
         // 프리미엄 요금제냐는 뜻 - 구독제를 쓰냐는 뜻
-        var tier = "p"
-        if(tier == "p") {
+        if(price != 0) {
             Spacer(Modifier.width(3.dp))
             Surface(
                 modifier = Modifier.size(20.dp),
@@ -149,7 +144,8 @@ fun PostItem(index: Int, post: PostUiState){
 
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .bounceClick { isLiked.value = !isLiked.value },
         elevation = 4.dp,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -166,7 +162,7 @@ fun PostItem(index: Int, post: PostUiState){
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row() {
-                    ProfileInfo(index = index, mode = 0, userName = userName, userImage = userImage)
+                    ProfileInfo(index = index, mode = 0, userName = userName, userImage = userImage, price = post.price)
                 }
                 PostHeartCard(modifier = Modifier, heartState = isLiked)
             }
@@ -182,8 +178,7 @@ fun PostItem(index: Int, post: PostUiState){
             ) {
                 Surface(
                     modifier = Modifier
-                        .size(150.dp)
-                        .bounceClick { },
+                        .size(150.dp),
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
                     GlideImage(imageModel = post.originalPhoto.toUri(), contentDescription = "original")
@@ -191,8 +186,7 @@ fun PostItem(index: Int, post: PostUiState){
 
                 Surface(
                     modifier = Modifier
-                        .size(150.dp)
-                        .bounceClick { },
+                        .size(150.dp),
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                 ) {
                     GlideImage(imageModel = post.modifiedPhoto.toUri(), contentDescription = "original")
