@@ -28,11 +28,7 @@ import com.plzgpt.lenzhub.ui.view.LongButton
 @Preview(showBackground = true)
 @Composable
 fun LenzPostDetailScreen(
-    uiState: PostUiState = PostUiState(
-        userPhoto = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg".toUri(),
-        modifiedPhoto = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg".toUri(),
-        originalPhoto = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg".toUri()
-    ),
+    uiState: PostUiState = PostUiState(),
     onNext: () -> Unit = {}
 ) {
     Column(
@@ -47,7 +43,7 @@ fun LenzPostDetailScreen(
                 .padding(horizontal = 18.dp)
         ) {
             GlideImage(
-                imageModel = uiState.userPhoto,
+                imageModel = uiState.profileImg,
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
@@ -134,7 +130,7 @@ fun LenzPostDetailScreen(
         ) {
             Image(
                 painter = painterResource(
-                    when(uiState.category) {
+                    when(uiState.category_name) {
                         "인물" -> R.drawable.ic_person
                         "동물" -> R.drawable.ic_animal
                         "풍경" -> R.drawable.ic_sight
@@ -149,7 +145,7 @@ fun LenzPostDetailScreen(
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = uiState.category,
+                text = uiState.category_name,
                 style = TextStyle(
                     color = LHBlack,
                     fontSize = 16.sp,
@@ -173,7 +169,7 @@ fun LenzPostDetailScreen(
         ) {
             Image(
                 painter = painterResource(
-                    if(uiState.isFree) R.drawable.ic_free
+                    if(uiState.price == 0) R.drawable.ic_free
                     else R.drawable.ic_dollar
                 ),
                 contentDescription = null,
@@ -184,7 +180,7 @@ fun LenzPostDetailScreen(
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text =
-                if(uiState.isFree) "무료 렌즈입니다."
+                if(uiState.price == 0) "무료 렌즈입니다."
                 else "유료 렌즈입니다.",
                 style = TextStyle(
                     color = LHGray,
@@ -202,7 +198,7 @@ fun LenzPostDetailScreen(
             .background(LHBackground))
         Spacer(modifier = Modifier.height(18.dp))
         LongButton(
-            text = if (uiState.isFree) "저장하기" else "구매하기",
+            text = if (uiState.price == 0) "저장하기" else "구매하기",
             onClick = {
                 onNext()
             }

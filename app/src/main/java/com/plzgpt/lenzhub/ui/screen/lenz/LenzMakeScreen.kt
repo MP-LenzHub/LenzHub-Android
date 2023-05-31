@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +30,8 @@ import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.util.bounceClick
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
+import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.UploadViewModel
 
 
@@ -46,6 +49,7 @@ fun LenzMakeScreen (
     viewModel: UploadViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+    val userId = sharedPreferences.getInt(clientId, 0)
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LenzMakeScreen.valueOf(
         backStackEntry?.destination?.route ?: LenzMakeScreen.Picture.name
@@ -104,8 +108,7 @@ fun LenzMakeScreen (
                         viewModel.setPicture(it)
                         viewModel.setPictureBitmap(BitmapFactory.decodeFileDescriptor(
                             context.contentResolver.openFileDescriptor(it, "r")?.fileDescriptor, null, null
-                        ))
-                                  },
+                        )) },
                     onNext = { navController.navigate(route = LenzMakeScreen.Maker.name) }
                 )
             }
@@ -113,8 +116,9 @@ fun LenzMakeScreen (
                 LenzMaker(
                     photo = uiState.photoBitmap,
                     onNext = {
-                        navController.navigate(route = LenzMakeScreen.Description.name)
+
                         viewModel.setModifiedPicture(it)
+                        navController.navigate(route = LenzMakeScreen.Description.name)
                     }
                 )
             }
@@ -122,7 +126,15 @@ fun LenzMakeScreen (
                 LenzDescription(
                     originPhoto = uiState.photoBitmap,
                     modifiedPhoto = uiState.modifiedPhotoBitmap,
-                    onNext = { navController.navigate(route = LenzMakeScreen.Result.name) }
+                    lenzInfo = uiState.lenzInfo,
+                    onNext = {
+                        navController.navigate(route = LenzMakeScreen.Result.name)
+                        viewModel.postCreate(
+                            userId = userId,
+                            context = context,
+                            requestBody = it
+                        )
+                    }
                 )
             }
             composable(route = LenzMakeScreen.Result.name) {

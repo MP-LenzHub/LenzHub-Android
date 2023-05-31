@@ -130,6 +130,7 @@ fun LoginScreen() {
                                                 isLogin.value = true
 
                                                 editor.putInt(clientId, res.result.userId)
+                                                editor.apply()
 
                                                 mContext.startActivity(
                                                     Intent(mContext, MainActivity::class.java)

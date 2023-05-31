@@ -9,18 +9,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 
 class LenzMakeActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
-            ) {
-                LenzMakeScreen(context = this@LenzMakeActivity)
-            }
+            LenzMakeScreen(context = this@LenzMakeActivity)
         }
     }
 }

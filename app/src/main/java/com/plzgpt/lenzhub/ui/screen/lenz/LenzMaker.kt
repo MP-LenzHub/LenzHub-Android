@@ -2,12 +2,16 @@ package com.plzgpt.lenzhub.ui.screen.lenz
 
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.net.Uri
 import android.opengl.GLSurfaceView
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -24,6 +28,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -37,7 +42,7 @@ import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHPoint
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.util.bounceClick
-import java.io.OutputStream
+import java.io.*
 import kotlin.math.roundToInt
 
 
@@ -71,6 +76,7 @@ fun LenzMaker(
             .background(LHBackground)
     ) {
         val context = LocalContext.current
+        lateinit var composableView: View
 
         AndroidView(
             factory = {
@@ -103,31 +109,7 @@ fun LenzMaker(
                         Filter(FilterType.Grain, 0f, R.drawable.ic_effect_grain),
                         Filter(FilterType.Distortion, 0f, R.drawable.ic_effect_distort),
                         Filter(FilterType.Temperature, 0.5f, R.drawable.ic_effect_temper)
-                    )
-                ) }
-
-//            Slider(
-//                value = currentValue,
-//                valueRange = 0f..2f,
-//                onValueChange = {
-//                    currentValue = (it * 100).roundToInt() / 100.0f
-//                    photoFilter.setFilterValue(currentFilter.name, currentValue)
-//                    Log.d("Slider", "changed: $it")
-//                },
-//                steps = 200,
-//                colors = SliderDefaults.colors(
-//                    thumbColor = LHPoint,
-//                    activeTrackColor = LHPointAlpha,
-//                    inactiveTrackColor = LHPointAlpha,
-//                    activeTickColor = LHPointAlpha,
-//                    inactiveTickColor = LHPointAlpha
-//                ),
-//                onValueChangeFinished = {
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 36.dp)
-//            )
+                    ))}
 
             Row(
                 modifier = Modifier
@@ -235,8 +217,9 @@ fun LenzMaker(
             LongButton(
                 text = "다음",
                 onClick = {
-                    onNext(PhotoFilter.getInstance(context, photo).getModifiedPhoto())
-                    saveImageToGallery(photo, context.contentResolver, System.currentTimeMillis().toString() + ".jpeg")
+                    val modifiedPhoto = PhotoFilter.getInstance(context, photo).getModifiedPhoto()
+                    onNext(modifiedPhoto)
+                    saveImageOnAboveAndroidQ(context.contentResolver, modifiedPhoto)
                 },
                 modifier = Modifier
                     .align(CenterHorizontally)
@@ -247,29 +230,46 @@ fun LenzMaker(
 }
 
 @RequiresApi(Build.VERSION_CODES.Q)
-fun saveImageToGallery(bitmap: Bitmap, contentResolver: ContentResolver, displayName: String) {
-    val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-    val imageDetails = ContentValues().apply {
-        put(MediaStore.Images.Media.DISPLAY_NAME, displayName)
-        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+fun saveImageOnAboveAndroidQ(contentResolver: ContentResolver, bitmap: Bitmap) {
+    val fileName = System.currentTimeMillis().toString() + ".png" // 파일이름 현재시간.png
+
+    /*
+    * ContentValues() 객체 생성.
+    * ContentValues는 ContentResolver가 처리할 수 있는 값을 저장해둘 목적으로 사용된다.
+    * */
+    val contentValues = ContentValues()
+    contentValues.apply {
+        put(MediaStore.Images.Media.RELATIVE_PATH, "DCIM/ImageSave") // 경로 설정
+        put(MediaStore.Images.Media.DISPLAY_NAME, fileName) // 파일이름을 put해준다.
+        put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+        put(MediaStore.Images.Media.IS_PENDING, 1) // 현재 is_pending 상태임을 만들어준다.
+        // 다른 곳에서 이 데이터를 요구하면 무시하라는 의미로, 해당 저장소를 독점할 수 있다.
     }
 
-    var imageUri: Uri? = null
+    // 이미지를 저장할 uri를 미리 설정해놓는다.
+    val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
     try {
-        imageUri = contentResolver.insert(imageCollection, imageDetails)
-        imageUri?.let {
-            val outputStream: OutputStream? = contentResolver.openOutputStream(it)
-            outputStream?.use { stream ->
-                if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
-                    Toast.makeText(applicationContext, "Failed to save image", Toast.LENGTH_SHORT).show()
-                }
+        if(uri != null) {
+            val image = contentResolver.openFileDescriptor(uri, "w", null)
+            // write 모드로 file을 open한다.
+
+            if(image != null) {
+                val fos = FileOutputStream(image.fileDescriptor)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+                //비트맵을 FileOutputStream를 통해 compress한다.
+                fos.close()
+
+                contentValues.clear()
+                contentValues.put(MediaStore.Images.Media.IS_PENDING, 0) // 저장소 독점을 해제한다.
+                contentResolver.update(uri, contentValues, null, null)
             }
         }
+    } catch(e: FileNotFoundException) {
+        e.printStackTrace()
+    } catch (e: IOException) {
+        e.printStackTrace()
     } catch (e: Exception) {
-        Toast.makeText(applicationContext, "Failed to save image: ${e.message}", Toast.LENGTH_SHORT).show()
-    } finally {
-        imageUri?.let {
-            contentResolver.delete(it, null, null)
-        }
+        e.printStackTrace()
     }
 }

@@ -2,18 +2,17 @@ package com.plzgpt.lenzhub.opengl
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.media.effect.Effect
 import android.media.effect.EffectContext
 import android.media.effect.EffectFactory
+import android.opengl.GLES10
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.GLUtils
-import android.os.Environment
 import android.util.Log
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import com.plzgpt.lenzhub.api.dto.LenzBasicInfoDto
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -29,11 +28,11 @@ class PhotoFilter(context: Context, photo: Bitmap): GLSurfaceView.Renderer {
             return instance
         }
     }
-    private var originalPhoto = photo
     private var photoWidth = context.resources.displayMetrics.widthPixels
     private var photoHeight = context.resources.displayMetrics.widthPixels
 
     private var resizedPhoto = Bitmap.createScaledBitmap(photo, photoWidth, photoHeight, false)
+    private var modifiedPhoto = resizedPhoto.copy(resizedPhoto.config, true)
 
     private val textures = IntArray(10)
     private lateinit var square: Square
@@ -99,6 +98,8 @@ class PhotoFilter(context: Context, photo: Bitmap): GLSurfaceView.Renderer {
         }
 
         square.draw(textures[8])
+
+        modifiedPhoto = setModifiedPhoto(gl)
     }
 
     fun setFilterValue(name: String, value: Float) {
@@ -109,21 +110,42 @@ class PhotoFilter(context: Context, photo: Bitmap): GLSurfaceView.Renderer {
         }
     }
 
-    fun getModifiedPhoto(): Bitmap {
-        var outputStream: FileOutputStream? = null
-        val dir = File(Environment.getExternalStorageDirectory().absolutePath + "/lenzhub")
-        val fileName = System.currentTimeMillis().toString() + ".jpeg"
-        val file = File(dir, fileName)
+    fun setAllValue(lenzBasicInfoDto: LenzBasicInfoDto) {
+        for(i in 0 .. 7) {
+            when(effects[i].name) {
+                "Brightness" -> effects[i].value = lenzBasicInfoDto.brightness
+                "Contrast" -> effects[i].value = lenzBasicInfoDto.contrast
+                "BackLight" -> effects[i].value = lenzBasicInfoDto.backLight
+                "Distortion" -> effects[i].value = lenzBasicInfoDto.distortion
+                "Grain" -> effects[i].value = lenzBasicInfoDto.grain
+                "Saturate" -> effects[i].value = lenzBasicInfoDto.saturate
+                "Sharpen" -> effects[i].value = lenzBasicInfoDto.sharpen
+                "Temperature" -> effects[i].value = lenzBasicInfoDto.temperature
+            }
+        }
+    }
 
-        try {
-            outputStream = FileOutputStream(file)
-            resizedPhoto.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            outputStream?.close()
+    fun getModifiedPhoto(): Bitmap {
+        return modifiedPhoto
+    }
+
+    private fun setModifiedPhoto(gl: GL10?): Bitmap {
+        val screenshotSize = photoWidth * photoHeight
+        var bb: ByteBuffer? = ByteBuffer.allocateDirect(screenshotSize * 4)
+        bb?.order(ByteOrder.nativeOrder())
+        gl?.glReadPixels(0, 0, photoWidth, photoHeight, GLES10.GL_RGBA, GLES10.GL_UNSIGNED_BYTE, bb)
+        var pixelsBuffer: IntArray = IntArray(screenshotSize)
+        bb?.asIntBuffer()?.get(pixelsBuffer)
+        bb = null
+
+        for (i in 0 until screenshotSize) {
+            var v:Int = pixelsBuffer[i]
+            pixelsBuffer[i] = (((v and 0x000000ff) shl 16) or (v and 0xff00ff00.toInt()) or ((v and 0x00ff0000) shr 16))
         }
 
-        return resizedPhoto
+        val bitmap = Bitmap.createBitmap(photoWidth, photoHeight, Bitmap.Config.ARGB_8888)
+        bitmap.setPixels(pixelsBuffer, screenshotSize - photoWidth, -photoHeight, 0, 0, photoWidth, photoHeight)
+
+        return bitmap
     }
 }
