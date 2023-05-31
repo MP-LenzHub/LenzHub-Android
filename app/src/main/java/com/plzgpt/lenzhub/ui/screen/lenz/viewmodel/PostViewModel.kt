@@ -1,11 +1,9 @@
 package com.plzgpt.lenzhub.ui.screen.lenz.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plzgpt.lenzhub.api.RetrofitBuilder
 import com.plzgpt.lenzhub.api.dto.LenzBasicInfoDto
-import com.plzgpt.lenzhub.api.dto.PostSaveRes
 import com.plzgpt.lenzhub.api.dto.PostSaveResResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,14 +28,19 @@ data class PostUiState(
     val likedCount: Int = 0,
 )
 
+
 class PostViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(PostUiState())
     val uiState: StateFlow<PostUiState> = _uiState.asStateFlow()
 
+    private val _allPostState = MutableStateFlow(PostAllState())
+    val allPostState: StateFlow<PostAllState> = _allPostState.asStateFlow()
+
     private val postRepository = PostRepository.getInstance()
 
+
     // 포스트 내용 요청
-    fun getPostUiState(id: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun getPostUiState(id: Int, size: Int) = viewModelScope.launch(Dispatchers.IO) {
         val result = postRepository.getPost(id)
         _uiState.update {
             it.copy(
@@ -79,4 +82,6 @@ class PostRepository {
     suspend fun savePost(userId: Int, postId: Int): PostSaveResResult = withContext(Dispatchers.IO) {
         RetrofitBuilder.lenzAPI.postSave(userId, postId).execute().body()?.result ?: PostSaveResResult()
     }
+
+
 }

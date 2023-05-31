@@ -40,4 +40,5 @@ interface LenzAPI {
     fun postGetSaved(
         @Path("userId") userId: Int
     ): Call<PostGetSavedRes>
+
 }

@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.gson.JsonObject
+
 import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
 import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.R
