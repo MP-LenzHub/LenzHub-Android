@@ -85,7 +85,7 @@ fun LenzPostScreen(
                 LenzPostDetailScreen(
                     uiState = uiState,
                     onNext = {
-                        if(uiState.isFree)
+                        if(uiState.price == 0)
                             navController.navigate(route = LenzPostScreen.Save.name)
                         else
                             navController.navigate(route = LenzPostScreen.Pay.name)
