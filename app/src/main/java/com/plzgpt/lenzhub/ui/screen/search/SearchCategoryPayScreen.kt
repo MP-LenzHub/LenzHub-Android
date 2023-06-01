@@ -61,7 +61,7 @@ fun SearchCategoryPayScreen(category: Category){
         if (posts != null) {
             if(posts.isEmpty()){
                 DiscoverSearchNoResultScreen(category.category)
-    //            Handler().postDelayed({isLoading.value = false}, 1000L)
+                //            Handler().postDelayed({isLoading.value = false}, 1000L)
             }
             else {
                 LazyColumn(

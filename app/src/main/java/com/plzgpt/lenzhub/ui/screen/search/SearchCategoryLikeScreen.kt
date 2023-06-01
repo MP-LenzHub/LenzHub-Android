@@ -12,18 +12,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.plzgpt.lenzhub.api.dto.FollowListDTO
 import com.plzgpt.lenzhub.api.dto.GetSearchCategoryPost
 import com.plzgpt.lenzhub.api.dto.GetSearchLikeUser
 import com.plzgpt.lenzhub.ui.screen.profile.ProfileInfo
 
 
 @Composable
-fun SearchCategoryLikeScreen(id: Int){
+fun SearchCategoryLikeScreen(followList: FollowListDTO){
     val context = LocalContext.current
 
 //    val responseBody  = remember { mutableStateOf(GetSearchPost()) }
 
-    val isLoading = remember { mutableStateOf(true) }
+    val isLoading = remember { mutableStateOf(false) }
 
 //    RetrofitBuilder.postAPI
 //        .getCategorySearchPost(category.category)
@@ -94,17 +95,17 @@ fun SearchCategoryLikeScreen(id: Int){
 
 
 
-        if(profiles == null){
-           // DiscoverSearchNoResultScreen(category.category)
+        if(followList.followList.size == 0){
+           DiscoverSearchNoResultScreen("팔로잉 유저")
         }
         else {
+            isLoading.value = false
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 18.dp, vertical = 18.dp),
                 verticalArrangement = Arrangement.spacedBy(18.dp)
             ) { items(
-                items = profiles,
-                key = {profiles -> profiles.user_id }
+                items = followList.followList,
             ) { item ->
                 ProfileInfo(item)
             }

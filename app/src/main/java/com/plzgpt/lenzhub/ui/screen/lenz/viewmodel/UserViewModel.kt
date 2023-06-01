@@ -58,6 +58,8 @@ class UserViewModel : ViewModel() {
                 createdPosts = result.createdPosts,
             )
         }
+
+        Log.d("결과",result.toString())
     }
 
     fun deleteUser(userId: Int) = viewModelScope.launch(Dispatchers.IO) {

@@ -44,9 +44,7 @@ import com.skydoves.landscapist.glide.GlideImage
 @Preview
 @Composable
 fun MainScreen(
-
     viewModel: HomeViewModel = viewModel(),
-
     ) {
     val userId = ApplicationClass.sharedPreferences.getInt(clientId, 0)
 
@@ -89,8 +87,6 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
         val coroutineScope = rememberCoroutineScope()
 
 
-        //받아와
-        // list 넘겨줘
         LazyColumn(
             state = scrollState,
             contentPadding = PaddingValues(horizontal = 0.dp, vertical = 18.dp),
@@ -105,12 +101,14 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
 }
 
 @Composable
-fun ProfileInfo( mode : Int = 0, userName:String = "test", userImage:String = "", grade: String = "Basic") {
+fun ProfileInfo(userIdx : Int = 0, mode : Int = 0, userName:String = "test", userImage:String = "", grade: String = "Basic") {
 
     var cashman = false
     if (grade != "Basic") {
         cashman = true
     }
+    val myId = ApplicationClass.sharedPreferences.getInt(ApplicationClass.clientId, 0)
+
 
 //Box로 바꿩
     Surface(
@@ -315,6 +313,5 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                 }
                 Spacer(Modifier.width(17.dp))
             }
-
     }
 }

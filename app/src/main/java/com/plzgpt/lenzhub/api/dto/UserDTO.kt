@@ -116,6 +116,7 @@ data class FollowListDTO(
 )
 
 data class Follower(
-    var name : String,
-    var userId : String
+    var userName : String,
+    var grade : String,
+    var filterCount : Int
 )
