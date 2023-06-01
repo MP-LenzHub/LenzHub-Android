@@ -29,14 +29,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.plzgpt.lenzhub.ApplicationClass
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.api.RetrofitBuilder
 import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
 import com.plzgpt.lenzhub.ui.data.Category
 import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
+import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostScreen
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.UserViewModel
 import com.plzgpt.lenzhub.ui.screen.main.ProfileInfo
 import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryFreeScreen
@@ -46,6 +51,7 @@ import com.plzgpt.lenzhub.ui.theme.LHBackground
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.plzgpt.lenzhub.ui.theme.LHMainBackground
+import com.plzgpt.lenzhub.util.PostHeartCard
 import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
 import kotlinx.coroutines.launch
@@ -55,8 +61,15 @@ import retrofit2.Response
 
 
 @Composable
-fun ProfileScreen(userIdx : Int) {
+fun ProfileScreen(
+    userIdx : Int,
+    navController: NavHostController = rememberNavController()
+) {
     val mContext = LocalContext.current
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = LenzPostScreen.valueOf(
+        backStackEntry?.destination?.route ?: LenzPostScreen.Post.name
+    )
 
     val isUserInfo = remember { mutableStateOf(false) }
     var viewModel : UserViewModel = UserViewModel()
@@ -78,7 +91,9 @@ fun MainScreen(userIdx: Int, viewModel : UserViewModel){
     val userState by viewModel.userState.collectAsState()
     val profileState by viewModel.profileState.collectAsState()
     val followerState by viewModel.followerState.collectAsState()
+    val isLiked = remember { mutableStateOf(false) } // 좋아요 했는지 여부
 
+    val myId = ApplicationClass.sharedPreferences.getInt(ApplicationClass.clientId, 0)
 
     viewModel.getProfile(userIdx)
 
@@ -89,15 +104,31 @@ fun MainScreen(userIdx: Int, viewModel : UserViewModel){
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, start = 25.dp, end = 25.dp, bottom = 20.dp)
-            ,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            ProfileInfo(mode = 1, userName = profileState.name, userImage = profileState.profileImgUrl, grade = "")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, start = 25.dp, end = 25.dp, bottom = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ProfileInfo(
+                    userIdx = userIdx,
+                    mode = 1,
+                    userName = profileState.name,
+                    userImage = profileState.profileImgUrl,
+                    grade = ""
+                )
+                if (myId != userIdx) {
+                    PostHeartCard(modifier = Modifier, heartState = isLiked)
+                }
+            }
+
         }
-        FilterLike(profileState.createdPosts.postList.size, profileState.likedPosts.postList.size)
-        Pager()
+        FilterLike(profileState.createPosts.postList.size, profileState.likedCounts)
+        Pager(userIdx,viewModel)
     }
 
 }
@@ -137,7 +168,7 @@ fun FilterLike(filter : Int, like : Int){
         ){
             Spacer(Modifier.width(4.dp))
             Text(
-                "좋아요 : $filter",
+                "좋아요 : $like",
                 style = TextStyle(
                     fontWeight = FontWeight.Normal,
                     fontSize = 18.sp,
@@ -151,11 +182,15 @@ fun FilterLike(filter : Int, like : Int){
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Pager(){
+fun Pager(userIdx:Int, viewModel: UserViewModel){
     val titles = listOf("제작 필터", "저장 필터", "좋아요")
     val pagerState = rememberPagerState()
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val profileState by viewModel.profileState.collectAsState()
+    val followerState by viewModel.followerState.collectAsState()
+
+    viewModel.getFollowInfo(userIdx)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -195,8 +230,6 @@ fun Pager(){
                         )
                     }
                 }
-                // 내 아이디
-                var myId = 77
 
                 //포스트, 큐레이션 텝 레이아웃
                 HorizontalPager(
@@ -207,9 +240,9 @@ fun Pager(){
                 ) { page ->
                     when (page) {
                         //나중에 API로 받은 값(List)도 넣어줘야할듯
-                        0 -> SearchCategoryFreeScreen(Category.PERSON)
-                        1 -> SearchCategoryPayScreen(Category.ANIMAL)
-                        2 -> SearchCategoryLikeScreen(myId)
+                        0 -> MyLenzScreen(profileState.createPosts)
+                        1 -> MySaveScreen(profileState.likedPosts)
+                        2 -> SearchCategoryLikeScreen(followerState)
                     }
 
                 }

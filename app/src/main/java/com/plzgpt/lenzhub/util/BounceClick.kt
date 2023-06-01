@@ -6,14 +6,20 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.math.pow
 
@@ -30,9 +36,21 @@ fun Modifier.bounceClick(onClick: () -> Unit) = composed {
     val animationDuration = 150
     val mContext = LocalContext.current
 
+    val colorOverlay = LocalElevationOverlay.current?.apply(
+        color = Color.Transparent,
+        elevation = 0.dp
+    ) ?: Color.Transparent
 
     this
-        .scale(scale = scale.value)
+        .drawBehind {
+            drawRect(color = colorOverlay)
+        }
+        .graphicsLayer(scaleX = scale.value, scaleY = scale.value)
+        .clickable(
+            interactionSource = interactionSource,
+            indication = null,
+            onClick = {}
+        )
         .alpha(
             (0.0012)
                 .pow((1 - scale.value).toDouble())

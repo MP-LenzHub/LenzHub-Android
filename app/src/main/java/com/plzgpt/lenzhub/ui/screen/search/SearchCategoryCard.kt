@@ -1,5 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.search
 
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
 import com.plzgpt.lenzhub.api.dto.GetSearchCategoryPost
+import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostActivity
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.plzgpt.lenzhub.util.ShowProgressBar
@@ -38,9 +40,11 @@ import com.skydoves.landscapist.glide.GlideImage
 fun  SearchCategoryCard(
     postData: GetSearchCategoryPost
 
+
 ) {
     val mContext = LocalContext.current
     val likeCnt = remember { mutableStateOf(postData.likedCount) }
+    val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.StartIntentSenderForResult()) {
@@ -51,6 +55,10 @@ fun  SearchCategoryCard(
         modifier = Modifier
             .fillMaxWidth()
             .bounceClick {
+                val intent = Intent(context, LenzPostActivity::class.java)
+                intent.putExtra("postId", postData.id)
+                context.startActivity(intent)
+                         },
 //                val intent = Intent(mContext, PostContentActivity::class.java)
 //                val bundle = Bundle()
 //
@@ -80,7 +88,6 @@ fun  SearchCategoryCard(
 //                        .Builder(pendIntent)
 //                        .build()
 //                )
-            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Card(

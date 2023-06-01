@@ -1,5 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.lenz.post
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +24,9 @@ import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.skydoves.landscapist.glide.GlideImage
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.ui.screen.profile.ProfileActivity
 import com.plzgpt.lenzhub.ui.view.LongButton
+import com.plzgpt.lenzhub.util.bounceClick
 
 @Preview(showBackground = true)
 @Composable
@@ -30,6 +34,7 @@ fun LenzPostDetailScreen(
     uiState: PostUiState = PostUiState(),
     onNext: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,6 +45,11 @@ fun LenzPostDetailScreen(
             modifier = Modifier
                 .wrapContentSize()
                 .padding(horizontal = 18.dp)
+                .bounceClick {
+                    val intent = Intent(context, ProfileActivity::class.java)
+                    intent.putExtra("profileId", uiState.id)
+                    context.startActivity(intent)
+                     },
         ) {
             GlideImage(
                 imageModel = uiState.profileImg,
