@@ -22,11 +22,11 @@ data class LenzBasicInfoDto(
     val brightness: Float = 1f,
     val contrast: Float = 1f,
     val backLight: Float = 0f,
-    val saturate: Float = 0f,
+    val distortion: Float = 0f,
     val grain: Float = 0f,
-    val temperature: Float = 0f,
+    val saturate: Float = 0f,
     val sharpen: Float = 0f,
-    val distortion: Float = 0.5f
+    val temperature: Float = 0.5f
 )
 
 data class PostCreateRes(

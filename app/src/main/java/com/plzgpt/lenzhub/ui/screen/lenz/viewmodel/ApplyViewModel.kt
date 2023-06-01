@@ -2,6 +2,7 @@ package com.plzgpt.lenzhub.ui.screen.lenz.viewmodel
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plzgpt.lenzhub.api.RetrofitBuilder
@@ -26,7 +27,7 @@ data class ApplyUiState(
     val photo: Uri = Uri.EMPTY,
     val photoBitmap: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
     val modifiedPhotoBitmap: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
-    val lenzList: List<PostUiState> = listOf()
+    val lenzList: ArrayList<PostUiState> = arrayListOf()
 )
 
 class ApplyViewModel: ViewModel() {
@@ -74,6 +75,11 @@ class ApplyRepository private constructor() {
     }
 
     suspend fun getLenzList(id: Int): PostGetSavedResResult = withContext(Dispatchers.IO) {
-        RetrofitBuilder.lenzAPI.postGetSaved(id).execute().body()?.result ?: PostGetSavedResResult()
+        val response = RetrofitBuilder.lenzAPI.postGetSaved(id).execute()
+
+        Log.d("ApplyRepository", "getLenzList: $response")
+        Log.d("ApplyRepository", "getLenzList: ${response.body()}")
+
+        response.body()?.result ?: PostGetSavedResResult(arrayListOf())
     }
 }

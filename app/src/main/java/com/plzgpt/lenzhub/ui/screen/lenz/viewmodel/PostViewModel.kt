@@ -86,6 +86,4 @@ class PostRepository {
     suspend fun savePost(userId: Int, postId: Int): PostSaveResResult = withContext(Dispatchers.IO) {
         RetrofitBuilder.lenzAPI.postSave(userId, postId).execute().body()?.result ?: PostSaveResResult()
     }
-
-
 }

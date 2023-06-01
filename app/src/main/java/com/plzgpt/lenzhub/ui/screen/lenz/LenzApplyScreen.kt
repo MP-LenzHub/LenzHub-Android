@@ -24,6 +24,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
+import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.ApplyViewModel
 import com.plzgpt.lenzhub.ui.theme.LHBlack
@@ -85,6 +87,7 @@ fun LenzApplyScreen(
         }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
+        viewModel.getLenzList(sharedPreferences.getInt(clientId, 0))
 
         NavHost(
             navController = navController,
@@ -110,7 +113,8 @@ fun LenzApplyScreen(
                     onNext = {
                         navController.navigate(route = LenzApplyScreen.Result.name)
                         viewModel.setModifiedPicture(it)
-                    }
+                    },
+                    lenzList = uiState.lenzList,
                 )
             }
             composable(route = LenzApplyScreen.Result.name) {
