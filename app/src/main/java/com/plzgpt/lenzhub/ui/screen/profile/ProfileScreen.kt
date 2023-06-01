@@ -29,6 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -38,6 +41,7 @@ import com.plzgpt.lenzhub.api.RetrofitBuilder
 import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
 import com.plzgpt.lenzhub.ui.data.Category
 import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
+import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostScreen
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.UserViewModel
 import com.plzgpt.lenzhub.ui.screen.main.ProfileInfo
 import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryFreeScreen
@@ -57,8 +61,15 @@ import retrofit2.Response
 
 
 @Composable
-fun ProfileScreen(userIdx : Int) {
+fun ProfileScreen(
+    userIdx : Int,
+    navController: NavHostController = rememberNavController()
+) {
     val mContext = LocalContext.current
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = LenzPostScreen.valueOf(
+        backStackEntry?.destination?.route ?: LenzPostScreen.Post.name
+    )
 
     val isUserInfo = remember { mutableStateOf(false) }
     var viewModel : UserViewModel = UserViewModel()
@@ -116,7 +127,7 @@ fun MainScreen(userIdx: Int, viewModel : UserViewModel){
             }
 
         }
-        FilterLike(profileState.createdPosts.postList.size, profileState.likedPosts.postList.size)
+        FilterLike(profileState.createPosts.postList.size, profileState.likedCounts)
         Pager(userIdx,viewModel)
     }
 
@@ -229,7 +240,7 @@ fun Pager(userIdx:Int, viewModel: UserViewModel){
                 ) { page ->
                     when (page) {
                         //나중에 API로 받은 값(List)도 넣어줘야할듯
-                        0 -> MyLenzScreen(profileState.createdPosts)
+                        0 -> MyLenzScreen(profileState.createPosts)
                         1 -> MySaveScreen(profileState.likedPosts)
                         2 -> SearchCategoryLikeScreen(followerState)
                     }

@@ -92,10 +92,11 @@ data class UserProfileInfo (
     var userId : String = "",
     var name : String = "",
     var profileImgUrl : String = "",
+    var userGrade : String = "",
     var followCounts : Int = 0,
-    var likeCounts: Int = 0,
+    var likedCounts: Int = 0,
     var likedPosts: PostListDto = PostListDto(),
-    var createdPosts: PostListDto = PostListDto(),
+    var createPosts: PostListDto = PostListDto(),
 )
 
 // 팔로우 하기

@@ -53,9 +53,10 @@ class UserViewModel : ViewModel() {
                 name = result.name,
                 profileImgUrl = "",
                 followCounts = result.followCounts,
-                likeCounts = result.likeCounts,
+                userGrade = result.userGrade,
+                likedCounts = result.likedCounts,
                 likedPosts = result.likedPosts,
-                createdPosts = result.createdPosts,
+                createPosts = result.createPosts,
             )
         }
 
