@@ -7,7 +7,7 @@ data class SearchResponseDTO(
     val result: PostListDto ?=  null
 )
 data class PostListDto(
-    val postList: ArrayList<GetSearchCategoryPost>
+    val postList: ArrayList<GetSearchCategoryPost> = arrayListOf<GetSearchCategoryPost>()
 )
 
 data class GetSearchCategoryPost(
