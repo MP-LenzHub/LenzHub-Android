@@ -58,7 +58,7 @@ fun LenzApplyResult(
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold
             ),
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(CenterHorizontally)
         )
         Spacer(modifier = Modifier.weight(1f))
         LongButton(

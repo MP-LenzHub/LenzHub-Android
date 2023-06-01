@@ -24,6 +24,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.plzgpt.lenzhub.ApplicationClass.Companion.clientId
+import com.plzgpt.lenzhub.ApplicationClass.Companion.sharedPreferences
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostViewModel
 import com.plzgpt.lenzhub.ui.theme.LHBlack
@@ -46,6 +48,7 @@ fun LenzPostScreen(
     val currentScreen = LenzPostScreen.valueOf(
         backStackEntry?.destination?.route ?: LenzPostScreen.Post.name
     )
+    val userId = sharedPreferences.getInt(clientId, 0)
 
     Scaffold (
         topBar = {
@@ -92,6 +95,7 @@ fun LenzPostScreen(
                             navController.navigate(route = LenzPostScreen.Save.name)
                         else
                             navController.navigate(route = LenzPostScreen.Pay.name)
+                        viewModel.savePost(userId, uiState.id)
                     }
                 )
             }
@@ -102,6 +106,9 @@ fun LenzPostScreen(
             }
             composable(route = LenzPostScreen.Save.name) {
                 LenzSaveScreen(
+                    title = uiState.title,
+                    beforeImg = uiState.beforeImg,
+                    afterImg = uiState.afterImg,
                     onNext = { context.finish() }
                 )
             }
