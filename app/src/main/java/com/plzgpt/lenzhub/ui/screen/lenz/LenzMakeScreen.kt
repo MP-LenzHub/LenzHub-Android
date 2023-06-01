@@ -115,8 +115,10 @@ fun LenzMakeScreen (
             composable(route = LenzMakeScreen.Maker.name) {
                 LenzMaker(
                     photo = uiState.photoBitmap,
+                    setLenz = {
+                        viewModel.setLenzInfo(it)
+                    },
                     onNext = {
-
                         viewModel.setModifiedPicture(it)
                         navController.navigate(route = LenzMakeScreen.Description.name)
                     }
