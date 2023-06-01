@@ -105,10 +105,10 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
 }
 
 @Composable
-fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:String = "", price: Int = 0) {
+fun ProfileInfo( mode : Int = 0, userName:String = "test", userImage:String = "", grade: String = "Basic") {
 
     var cashman = false
-    if (price != 0) {
+    if (grade != "Basic") {
         cashman = true
     }
 
@@ -137,7 +137,7 @@ fun ProfileInfo(index:Int, mode : Int = 0, userName:String = "test", userImage:S
         // 비슷한 구조라서 메인이 post의 프로필인지, 프로필screen의 프로필인지에 따라 크기 변경
         if (mode != 0 || cashman) {
             // 프리미엄 요금제냐는 뜻 - 구독제를 쓰냐는 뜻
-            if (price != 0) {
+            if (grade != "Basic") {
                 Spacer(Modifier.width(3.dp))
                 Surface(
                     modifier = Modifier.size(20.dp),
@@ -183,11 +183,10 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                 ) {
                     Row() {
                         ProfileInfo(
-                            index = index,
                             mode = 0,
                             userName = userName,
                             userImage = userImage,
-                            price = post.price
+                            grade = "Basic"
                         )
                     }
                     PostHeartCard(modifier = Modifier, heartState = isLiked)

@@ -10,7 +10,6 @@ interface BoardAPI {
     // 게시글 전체 조회
     @GET("/api/board")
     fun postGetAll(
-
     ): Call<SearchResponseDTO>
 
 }

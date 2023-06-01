@@ -11,10 +11,7 @@ import androidx.compose.foundation.shape.*
 
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,10 +34,10 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.api.RetrofitBuilder
-import com.plzgpt.lenzhub.api.dto.GetUserInfoResponseDTO
 import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
 import com.plzgpt.lenzhub.ui.data.Category
 import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
+import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.UserViewModel
 import com.plzgpt.lenzhub.ui.screen.main.ProfileInfo
 import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryFreeScreen
 import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryLikeScreen
@@ -57,57 +54,35 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-@Preview
 @Composable
 fun ProfileScreen(userIdx : Int) {
     val mContext = LocalContext.current
 
     val isUserInfo = remember { mutableStateOf(false) }
+    var viewModel : UserViewModel = UserViewModel()
 
 
-    RetrofitBuilder.userAPI.userProfile(userIdx)
-        .enqueue(object : Callback<GetUserInfoResponseDTO> {
-            override fun onResponse(
-                call: Call<GetUserInfoResponseDTO>,
-                response: Response<GetUserInfoResponseDTO>
-            ) {
-                if (response.isSuccessful) {
-                    val res = response.body()
-                    if (res != null) {
-                        if (res.isSuccess) {
-                            isUserInfo.value = true
-                            Log.d("userInfo","성공")
-
-
-                        }
-                    }
-                }
-            }
-            override fun onFailure(
-                call: Call<GetUserInfoResponseDTO>,
-                t: Throwable
-            ) {
-                Toast.makeText(mContext, "서버가 응답하지 않아요", Toast.LENGTH_SHORT).show()
-            }
-
-        })
-
-    var myId = userIdx
-    var filter = 10
-    var like = 12
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(top = 40.dp)
     ) {
-        MainScreen(myId,filter, like)
+        MainScreen(userIdx, viewModel)
     }
 }
 
 
 @Composable
-fun MainScreen(id: Int, filter: Int, like: Int){
+fun MainScreen(userIdx: Int, viewModel : UserViewModel){
+    val userState by viewModel.userState.collectAsState()
+    val profileState by viewModel.profileState.collectAsState()
+    val followerState by viewModel.followerState.collectAsState()
+
+
+    viewModel.getProfile(userIdx)
+
+
     Column(){
 
         Text(text = "프로필", fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 18.dp))
@@ -119,9 +94,9 @@ fun MainScreen(id: Int, filter: Int, like: Int){
             ,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProfileInfo(id, 1)
+            ProfileInfo(mode = 1, userName = profileState.name, userImage = profileState.profileImgUrl, grade = "")
         }
-        FilterLike(filter, like)
+        FilterLike(profileState.createdPosts.postList.size, profileState.likedPosts.postList.size)
         Pager()
     }
 
@@ -131,7 +106,9 @@ fun MainScreen(id: Int, filter: Int, like: Int){
 @Composable
 fun FilterLike(filter : Int, like : Int){
 
-    Row(modifier = Modifier.padding(top = 0.dp, start = 37.dp, end = 37.dp, bottom = 13.dp).fillMaxWidth(),
+    Row(modifier = Modifier
+        .padding(top = 0.dp, start = 37.dp, end = 37.dp, bottom = 13.dp)
+        .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ){
@@ -200,7 +177,7 @@ fun Pager(){
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
-                        .padding(start = 18.dp, end= 18.dp)
+                        .padding(start = 18.dp, end = 18.dp)
                 ) {
                     titles.forEachIndexed { index, title ->
                         Tab(
@@ -212,7 +189,9 @@ fun Pager(){
                             onClick = { scope.launch {
                                 pagerState.scrollToPage(index)
                             }},
-                            modifier = Modifier.height(48.dp).bounceClick {  }
+                            modifier = Modifier
+                                .height(48.dp)
+                                .bounceClick { }
                         )
                     }
                 }
