@@ -63,13 +63,9 @@ import retrofit2.Response
 @Composable
 fun ProfileScreen(
     userIdx : Int,
-    navController: NavHostController = rememberNavController()
 ) {
     val mContext = LocalContext.current
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = LenzPostScreen.valueOf(
-        backStackEntry?.destination?.route ?: LenzPostScreen.Post.name
-    )
+
 
     val isUserInfo = remember { mutableStateOf(false) }
     var viewModel : UserViewModel = UserViewModel()

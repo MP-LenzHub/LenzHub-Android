@@ -1,6 +1,7 @@
 package com.plzgpt.lenzhub.ui.screen.lenz.post
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ class LenzPostActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
+                Log.d("LenzPostActivity", "profileId??: ${intent.getIntExtra("postId", 0)}")
                 LenzPostScreen(this, intent.getIntExtra("postId", 0))
             }
         }

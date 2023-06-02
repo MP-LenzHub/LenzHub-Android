@@ -1,6 +1,7 @@
 package com.plzgpt.lenzhub.ui.screen.profile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,8 @@ class ProfileActivity  : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                ProfileScreen(intent.getIntExtra("profileId", 0))
+                Profile2Screen(intent.getIntExtra("profileId", 0))
+            Log.d("ProfileActivity", "profileId: ${intent.getIntExtra("profileId", 0)}")
             }
         }
     }
