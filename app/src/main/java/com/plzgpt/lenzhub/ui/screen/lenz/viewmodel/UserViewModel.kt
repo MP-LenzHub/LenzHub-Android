@@ -67,12 +67,12 @@ class UserViewModel : ViewModel() {
         userRepository.deleteProfile(userId)
     }
 
-    fun postFollow(followRequestBody: FollowRequestBody) = viewModelScope.launch(Dispatchers.IO) {
-        userRepository.postFollow(followRequestBody)
+    fun postFollow(toUserId: Int, fromUserId: Int) = viewModelScope.launch(Dispatchers.IO) {
+        userRepository.postFollow(toUserId, fromUserId)
     }
 
-    fun patchFollow(followRequestBody: FollowRequestBody) = viewModelScope.launch(Dispatchers.IO) {
-        userRepository.patchFollow(followRequestBody)
+    fun patchFollow(toUserId: Int, fromUserId: Int) = viewModelScope.launch(Dispatchers.IO) {
+        userRepository.patchFollow(toUserId, fromUserId)
     }
 
     fun getFollowInfo(userId: Int) = viewModelScope.launch(Dispatchers.IO) {
@@ -103,11 +103,11 @@ class UserRepository {
     suspend fun deleteProfile(userId : Int): Message = withContext(Dispatchers.IO) {
         RetrofitBuilder.userAPI.deleteProfile(userId).execute().body()?.result?: Message()
     }
-    suspend fun postFollow(followRequestBody: FollowRequestBody): Message = withContext(Dispatchers.IO) {
-        RetrofitBuilder.userAPI.postFollow(followRequestBody).execute().body()?.result?: Message()
+    suspend fun postFollow(toUserId : Int, fromUserId: Int): Message = withContext(Dispatchers.IO) {
+        RetrofitBuilder.userAPI.postFollow(toUserId,fromUserId ).execute().body()?.result?: Message()
     }
-    suspend fun patchFollow(followRequestBody: FollowRequestBody): Message = withContext(Dispatchers.IO) {
-        RetrofitBuilder.userAPI.patchFollow(followRequestBody).execute().body()?.result?: Message()
+    suspend fun patchFollow(toUserId : Int, fromUserId: Int): Message = withContext(Dispatchers.IO) {
+        RetrofitBuilder.userAPI.patchFollow(toUserId,fromUserId ).execute().body()?.result?: Message()
     }
     suspend fun getFollowInfo(userId : Int): FollowListDTO = withContext(Dispatchers.IO) {
         RetrofitBuilder.userAPI.getFollowInfo(userId).execute().body()?.result?: FollowListDTO()
