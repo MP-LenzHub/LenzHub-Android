@@ -80,17 +80,6 @@ fun LenzMakeScreen (
                     fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                if(currentScreen == LenzMakeScreen.Maker) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_photo_library),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .bounceClick {
-                                navController.navigate(route = LenzMakeScreen.Picture.name)
-                            }
-                    )
-                    Spacer(modifier = Modifier.height(18.dp))
-                }
             }
         }
     ) { innerPadding ->
