@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.navercorp.nid.NaverIdLoginSDK.applicationContext
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.api.dto.LenzBasicInfoDto
 import com.plzgpt.lenzhub.opengl.PhotoFilter
 import com.plzgpt.lenzhub.ui.theme.LHBackground
 import com.plzgpt.lenzhub.ui.theme.LHBlack
@@ -67,6 +68,7 @@ data class Filter (
 @Composable
 fun LenzMaker(
     photo: Bitmap = BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.ic_lenz_apply),
+    setLenz: (LenzBasicInfoDto) -> Unit = {},
     onNext: (Bitmap) -> Unit = {}
 ) {
     Column(
@@ -76,7 +78,6 @@ fun LenzMaker(
             .background(LHBackground)
     ) {
         val context = LocalContext.current
-        lateinit var composableView: View
 
         AndroidView(
             factory = {
@@ -218,8 +219,8 @@ fun LenzMaker(
                 text = "다음",
                 onClick = {
                     val modifiedPhoto = PhotoFilter.getInstance(context, photo).getModifiedPhoto()
+                    setLenz(PhotoFilter.getInstance(context, photo).getAllValue())
                     onNext(modifiedPhoto)
-                    saveImageOnAboveAndroidQ(context.contentResolver, modifiedPhoto)
                 },
                 modifier = Modifier
                     .align(CenterHorizontally)

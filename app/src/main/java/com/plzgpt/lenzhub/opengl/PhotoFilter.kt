@@ -111,18 +111,27 @@ class PhotoFilter(context: Context, photo: Bitmap): GLSurfaceView.Renderer {
     }
 
     fun setAllValue(lenzBasicInfoDto: LenzBasicInfoDto) {
-        for(i in 0 .. 7) {
-            when(effects[i].name) {
-                "Brightness" -> effects[i].value = lenzBasicInfoDto.brightness
-                "Contrast" -> effects[i].value = lenzBasicInfoDto.contrast
-                "BackLight" -> effects[i].value = lenzBasicInfoDto.backLight
-                "Distortion" -> effects[i].value = lenzBasicInfoDto.distortion
-                "Grain" -> effects[i].value = lenzBasicInfoDto.grain
-                "Saturate" -> effects[i].value = lenzBasicInfoDto.saturate
-                "Sharpen" -> effects[i].value = lenzBasicInfoDto.sharpen
-                "Temperature" -> effects[i].value = lenzBasicInfoDto.temperature
-            }
-        }
+        effects[0].value = lenzBasicInfoDto.brightness
+        effects[1].value = lenzBasicInfoDto.contrast
+        effects[2].value = lenzBasicInfoDto.backLight
+        effects[3].value = lenzBasicInfoDto.distortion
+        effects[4].value = lenzBasicInfoDto.grain
+        effects[5].value = lenzBasicInfoDto.saturate
+        effects[6].value = lenzBasicInfoDto.sharpen
+        effects[7].value = lenzBasicInfoDto.temperature
+    }
+
+    fun getAllValue(): LenzBasicInfoDto {
+        return LenzBasicInfoDto(
+            effects[0].value,
+            effects[1].value,
+            effects[2].value,
+            effects[3].value,
+            effects[4].value,
+            effects[5].value,
+            effects[6].value,
+            effects[7].value
+        )
     }
 
     fun getModifiedPhoto(): Bitmap {

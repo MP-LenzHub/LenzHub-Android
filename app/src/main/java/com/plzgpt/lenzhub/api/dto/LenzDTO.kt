@@ -1,6 +1,5 @@
 package com.plzgpt.lenzhub.api.dto
 
-import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostAllState
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
 
 data class PostCreateReqDto(
@@ -22,11 +21,11 @@ data class LenzBasicInfoDto(
     val brightness: Float = 1f,
     val contrast: Float = 1f,
     val backLight: Float = 0f,
-    val saturate: Float = 0f,
+    val distortion: Float = 0f,
     val grain: Float = 0f,
-    val temperature: Float = 0f,
+    val saturate: Float = 0f,
     val sharpen: Float = 0f,
-    val distortion: Float = 0.5f
+    val temperature: Float = 0.5f
 )
 
 data class PostCreateRes(
@@ -59,16 +58,5 @@ data class PostGetSavedRes(
 )
 
 data class PostGetSavedResResult(
-    val postList: List<PostUiState> = listOf()
-)
-
-data class PostGetAllRes(
-    val code: Int,
-    val isSuccess: Boolean,
-    val message: String,
-    val result: PostAllState
-)
-
-data class PostAllState(
-    val postList: List<PostUiState> = listOf()
+    val postList: ArrayList<PostUiState> = arrayListOf()
 )

@@ -1,5 +1,8 @@
 package com.plzgpt.lenzhub.ui.screen.lenz.post
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,27 +13,36 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
 import com.plzgpt.lenzhub.ui.theme.LHBackground
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.skydoves.landscapist.glide.GlideImage
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.ui.screen.profile.ProfileActivity
+import com.plzgpt.lenzhub.ui.theme.randomImage
 import com.plzgpt.lenzhub.ui.view.LongButton
+import com.plzgpt.lenzhub.util.bounceClick
+import kotlinx.coroutines.flow.StateFlow
 
-@Preview(showBackground = true)
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun LenzPostDetailScreen(
-    uiState: PostUiState = PostUiState(),
+    uiStateFlow: StateFlow<PostUiState>, // StateFlow로 변경
     onNext: () -> Unit = {}
 ) {
+    val uiState = uiStateFlow.value // 최신 uiState 값 가져오기
+    Log.d("uiState77", uiState.toString())
+
+    val context = LocalContext.current
+
+    Log.d("uiState7337", uiState.toString())
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,16 +53,22 @@ fun LenzPostDetailScreen(
             modifier = Modifier
                 .wrapContentSize()
                 .padding(horizontal = 18.dp)
+                .bounceClick {
+                    val intent = Intent(context, ProfileActivity::class.java)
+                    Log.d("uiState7887", uiState.userIdx.toString())
+                    intent.putExtra("profileId", uiState.userIdx)
+                    context.startActivity(intent)
+                     },
         ) {
             GlideImage(
-                imageModel = uiState.profileImg,
+                imageModel = if(uiState.profileImg == "") randomImage[uiState.userIdx%randomImage.size] else uiState.profileImg,
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = uiState.username,
+                text = uiState.userName,
                 style = TextStyle(
                     color = LHBlack,
                     fontSize = 16.sp,
@@ -67,14 +85,14 @@ fun LenzPostDetailScreen(
                 .padding(horizontal = 18.dp)
         ) {
             GlideImage(
-                imageModel = uiState.originalPhoto,
+                imageModel = uiState.beforeImg,
                 modifier = Modifier
                     .weight(6f)
                     .aspectRatio(1f)
             )
             Spacer(modifier = Modifier.weight(1f))
             GlideImage(
-                imageModel = uiState.modifiedPhoto,
+                imageModel = uiState.afterImg,
                 modifier = Modifier
                     .weight(6f)
                     .aspectRatio(1f)

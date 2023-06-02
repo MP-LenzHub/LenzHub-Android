@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.plzgpt.lenzhub.ApplicationClass
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.screen.main.MainScreen
 import com.plzgpt.lenzhub.ui.screen.profile.ProfileScreen
@@ -42,6 +43,7 @@ fun NavigationGraphBNB(
     val fadeOutDuration = 50
     val slideInDuration = 200
     val slideOutDuration = 200
+    val userId = ApplicationClass.sharedPreferences.getInt(ApplicationClass.clientId, 0)
 
     AnimatedNavHost(navController, startDestination = NAV_ROUTE_BNB.FOLLOW.routeName,
         modifier = Modifier.fillMaxSize()) {
@@ -161,7 +163,8 @@ fun NavigationGraphBNB(
                         slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(slideOutDuration))
             }
         ) {
-            ProfileScreen(77)
+
+            ProfileScreen(userId)
         }
     }
 }

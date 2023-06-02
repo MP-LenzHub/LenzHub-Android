@@ -122,12 +122,12 @@ fun LoginScreen() {
                                     call: Call<LogInResponseDTO>,
                                     response: Response<LogInResponseDTO>
                                 ) {
-                                    Log.d("login1",response.body().toString())
 
                                     if (response.isSuccessful) {
                                         val res = response.body()
                                         if (res != null) {
                                             if (res.isSuccess) {
+                                                Toast.makeText(mContext, "환영합니다!", Toast.LENGTH_LONG).show()
                                                 isLogin.value = true
 
                                                 editor.putInt(clientId, res.result.userId)
@@ -141,7 +141,8 @@ fun LoginScreen() {
                                                 )
                                             }
                                             else{
-                                                Toast.makeText(mContext, res.message, Toast.LENGTH_LONG).show()
+                                                Toast.makeText(mContext, "다시 한 번 확인해주세요.", Toast.LENGTH_LONG).show()
+
                                             }
                                         }
                                     }

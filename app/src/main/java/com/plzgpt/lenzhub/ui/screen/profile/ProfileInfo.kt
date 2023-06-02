@@ -1,5 +1,7 @@
 package com.plzgpt.lenzhub.ui.screen.profile
 
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -12,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -19,18 +22,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
 import com.plzgpt.lenzhub.R
+import com.plzgpt.lenzhub.api.dto.Follower
 import com.plzgpt.lenzhub.api.dto.GetSearchLikeUser
+import com.plzgpt.lenzhub.ui.theme.randomImage
 import com.plzgpt.lenzhub.util.ShowProgressBar
 import com.plzgpt.lenzhub.util.bounceClick
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun ProfileInfo(profileData : GetSearchLikeUser){
+fun ProfileInfo(profileData : Follower){
 
-    Row(modifier = Modifier.fillMaxWidth().bounceClick {  }) {
+    Log.d("ProfileInfo", "ProfileInfo: $profileData")
+    var context = LocalContext.current
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .bounceClick {
+                val intent = Intent(context, ProfileActivity::class.java)
+                Log.d("profileId ???", profileData.userId.toString())
+                intent.putExtra("profileId", profileData.userId)
+                context.startActivity(intent)
+            }
+    )
+     {
         //Box로 바꿩
         GlideImage( // CoilImage, FrescoImage
-            imageModel = profileData.user_profile_img,
+            imageModel = randomImage[profileData.userId % randomImage.size],
             modifier = Modifier
                 .size(width = 50.dp, height = 50.dp)
                 .clip(RoundedCornerShape(50.dp)),
@@ -52,14 +69,14 @@ fun ProfileInfo(profileData : GetSearchLikeUser){
         Column {
             Row() {
                 Text(
-                    "${profileData.user_name}",
+                    "${profileData.userName}",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
                 )
                 // 프리미엄 요금제냐는 뜻 - 구독제를 쓰냐는 뜻
-                if (profileData.free) {
+                if (profileData.grade != "Basic") {
                     Spacer(Modifier.width(3.dp))
                     Surface(
                         modifier = Modifier.size(20.dp),
@@ -73,7 +90,7 @@ fun ProfileInfo(profileData : GetSearchLikeUser){
             }
             Spacer(modifier = Modifier.height(7.dp))
             Text(
-                "필터:${profileData.filter}, 좋아요:${profileData.likes}",
+                "필터:${profileData.filterCount}",
                 style = TextStyle(
                     fontWeight = FontWeight.Normal,
                     fontSize = 11.sp,
