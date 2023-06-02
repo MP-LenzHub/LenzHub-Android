@@ -40,6 +40,12 @@ fun LenzPostDetailScreen(
     onNext: () -> Unit = {}
 ) {
     val uiState = uiStateFlow.value // 최신 uiState 값 가져오기
+    var profile = arrayOf(
+        "https://techrecipe.co.kr/wp-content/uploads/2022/08/220819_Beautiful-Landscapes_ai_0001.jpg",
+        "https://i.namu.wiki/i/qFWfOHBd0mx7NmNquwtaSbUjnPumXpk5oi1jxNKpWUsv_eGJe44xm9AePkbhQ6hIxTjMtroFaOFPbhBy0MSbNQ.webp",
+        "https://src.hidoc.co.kr/image/lib/2022/5/12/1652337370806_0.jpg",
+        "https://img.danawa.com/prod_img/500000/869/844/img/2844869_1.jpg?_v=20210325103140",
+        "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/T76RHKX27GOS5BHD6LCD5W6DNQ.jpg")
 
 
 
@@ -66,7 +72,7 @@ fun LenzPostDetailScreen(
                      },
         ) {
             GlideImage(
-                imageModel = uiState.profileImg,
+                imageModel = if(uiState.profileImg == "") profile[uiState.userIdx%profile.size] else uiState.profileImg,
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)

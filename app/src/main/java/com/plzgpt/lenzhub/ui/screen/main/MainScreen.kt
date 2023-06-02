@@ -117,7 +117,6 @@ fun ProfileInfo(userIdx : Int = 0, mode : Int = 0, userName:String = "test", use
                 "https://img.danawa.com/prod_img/500000/869/844/img/2844869_1.jpg?_v=20210325103140",
                 "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/T76RHKX27GOS5BHD6LCD5W6DNQ.jpg")
 
-    Log.d("profile", userIdx.toString())
 //Box로 바꿩
     Surface(
         modifier = if (mode == 0) Modifier.size(24.dp) else Modifier.size(50.dp),
@@ -125,7 +124,7 @@ fun ProfileInfo(userIdx : Int = 0, mode : Int = 0, userName:String = "test", use
         shape = CircleShape
     ) {
         GlideImage(
-            imageModel = profile[userIdx%profile.size],
+            imageModel = if(userImage == null) profile[userIdx%profile.size] else userImage,
             contentDescription = "",
             modifier = Modifier.size(20.dp)
         )
