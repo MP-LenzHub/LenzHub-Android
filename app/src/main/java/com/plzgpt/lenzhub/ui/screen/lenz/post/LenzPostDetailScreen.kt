@@ -1,6 +1,8 @@
 package com.plzgpt.lenzhub.ui.screen.lenz.post
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,14 +29,25 @@ import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.screen.profile.ProfileActivity
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.util.bounceClick
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-@Preview(showBackground = true)
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun LenzPostDetailScreen(
-    uiState: PostUiState = PostUiState(),
+    uiStateFlow: StateFlow<PostUiState>, // StateFlow로 변경
     onNext: () -> Unit = {}
 ) {
+    val uiState = uiStateFlow.value // 최신 uiState 값 가져오기
+
+
+
+    Log.d("uiState77", uiState.toString())
+
     val context = LocalContext.current
+
+    Log.d("uiState7337", uiState.toString())
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +60,8 @@ fun LenzPostDetailScreen(
                 .padding(horizontal = 18.dp)
                 .bounceClick {
                     val intent = Intent(context, ProfileActivity::class.java)
-                    intent.putExtra("profileId", uiState.id)
+                    Log.d("uiState7887", uiState.userIdx.toString())
+                    intent.putExtra("profileId", uiState.userIdx)
                     context.startActivity(intent)
                      },
         ) {

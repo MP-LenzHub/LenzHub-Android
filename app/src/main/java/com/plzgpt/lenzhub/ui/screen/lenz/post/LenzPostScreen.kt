@@ -2,6 +2,7 @@ package com.plzgpt.lenzhub.ui.screen.lenz.post
 
 import android.app.Activity
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,6 +31,8 @@ import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostViewModel
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.util.bounceClick
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 enum class LenzPostScreen (val title: String) {
     Post(title = "렌즈 상세"),
@@ -79,38 +82,44 @@ fun LenzPostScreen(
             }
         }
     ) { innerPadding ->
+        val uiStateFlow = viewModel.uiState
         val uiState by viewModel.uiState.collectAsState()
+        Log.d("LenzPostScreen, ProfileId", "postId: $postId")
         viewModel.getPostUiState(postId)
 
-        NavHost(
-            navController = navController,
-            startDestination = LenzPostScreen.Post.name,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(route = LenzPostScreen.Post.name) {
-                LenzPostDetailScreen(
-                    uiState = uiState,
-                    onNext = {
-                        if(uiState.price == 0)
-                            navController.navigate(route = LenzPostScreen.Save.name)
-                        else
-                            navController.navigate(route = LenzPostScreen.Pay.name)
-                        viewModel.savePost(userId, uiState.id)
-                    }
-                )
-            }
-            composable(route = LenzPostScreen.Pay.name) {
-                LenzPayScreen(
-                    onNext = { context.finish() }
-                )
-            }
-            composable(route = LenzPostScreen.Save.name) {
-                LenzSaveScreen(
-                    title = uiState.title,
-                    beforeImg = uiState.beforeImg,
-                    afterImg = uiState.afterImg,
-                    onNext = { context.finish() }
-                )
+        Log.d("LenzPostScreen, ProfileId", "uiState: $uiState")
+
+        if(uiState.id != 0) {
+            NavHost(
+                navController = navController,
+                startDestination = LenzPostScreen.Post.name,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(route = LenzPostScreen.Post.name) {
+                    LenzPostDetailScreen(
+                        uiStateFlow = uiStateFlow,
+                        onNext = {
+                            if (uiState.price == 0)
+                                navController.navigate(route = LenzPostScreen.Save.name)
+                            else
+                                navController.navigate(route = LenzPostScreen.Pay.name)
+                            viewModel.savePost(userId, uiState.id)
+                        }
+                    )
+                }
+                composable(route = LenzPostScreen.Pay.name) {
+                    LenzPayScreen(
+                        onNext = { context.finish() }
+                    )
+                }
+                composable(route = LenzPostScreen.Save.name) {
+                    LenzSaveScreen(
+                        title = uiState.title,
+                        beforeImg = uiState.beforeImg,
+                        afterImg = uiState.afterImg,
+                        onNext = { context.finish() }
+                    )
+                }
             }
         }
     }
