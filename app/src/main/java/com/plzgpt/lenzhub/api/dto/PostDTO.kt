@@ -12,6 +12,7 @@ data class PostListDto(
 
 data class GetSearchCategoryPost(
     val id: Int,
+    val userIdx: Int,
     val title: String,
     val userName: String,
     val profileImg: String,

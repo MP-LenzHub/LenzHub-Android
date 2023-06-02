@@ -1,6 +1,7 @@
 package com.plzgpt.lenzhub.ui.screen.main
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -44,9 +45,7 @@ import com.skydoves.landscapist.glide.GlideImage
 @Preview
 @Composable
 fun MainScreen(
-
     viewModel: HomeViewModel = viewModel(),
-
     ) {
     val userId = ApplicationClass.sharedPreferences.getInt(clientId, 0)
 
@@ -89,8 +88,6 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
         val coroutineScope = rememberCoroutineScope()
 
 
-        //받아와
-        // list 넘겨줘
         LazyColumn(
             state = scrollState,
             contentPadding = PaddingValues(horizontal = 0.dp, vertical = 18.dp),
@@ -105,12 +102,20 @@ fun PostList(viewModel: HomeViewModel, userId:Int) {
 }
 
 @Composable
-fun ProfileInfo( mode : Int = 0, userName:String = "test", userImage:String = "", grade: String = "Basic") {
+fun ProfileInfo(userIdx : Int = 0, mode : Int = 0, userName:String = "test", userImage:String = "", grade: String = "Basic") {
 
     var cashman = false
     if (grade != "Basic") {
         cashman = true
     }
+    val myId = ApplicationClass.sharedPreferences.getInt(ApplicationClass.clientId, 0)
+
+    var profile = arrayOf(
+        "https://techrecipe.co.kr/wp-content/uploads/2022/08/220819_Beautiful-Landscapes_ai_0001.jpg",
+        "https://i.namu.wiki/i/qFWfOHBd0mx7NmNquwtaSbUjnPumXpk5oi1jxNKpWUsv_eGJe44xm9AePkbhQ6hIxTjMtroFaOFPbhBy0MSbNQ.webp",
+                "https://src.hidoc.co.kr/image/lib/2022/5/12/1652337370806_0.jpg",
+                "https://img.danawa.com/prod_img/500000/869/844/img/2844869_1.jpg?_v=20210325103140",
+                "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/T76RHKX27GOS5BHD6LCD5W6DNQ.jpg")
 
 //Box로 바꿩
     Surface(
@@ -119,7 +124,7 @@ fun ProfileInfo( mode : Int = 0, userName:String = "test", userImage:String = ""
         shape = CircleShape
     ) {
         GlideImage(
-            imageModel = userImage,
+            imageModel = if(userImage == null) profile[userIdx%profile.size] else userImage,
             contentDescription = "",
             modifier = Modifier.size(20.dp)
         )
@@ -166,6 +171,7 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                 val intent = Intent(context, LenzPostActivity::class.java)
                 intent.putExtra("postId", post.id)
                 context.startActivity(intent)
+                Log.d("post, profileId", "post id : ${post.id}")
                 isLiked.value = !isLiked.value },
         elevation = 4.dp,
         shape = RoundedCornerShape(20.dp)
@@ -184,6 +190,7 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                     Row() {
                         ProfileInfo(
                             mode = 0,
+                            userIdx = post.userIdx,
                             userName = userName,
                             userImage = userImage,
                             grade = "Basic"
@@ -315,6 +322,5 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                 }
                 Spacer(Modifier.width(17.dp))
             }
-
     }
 }

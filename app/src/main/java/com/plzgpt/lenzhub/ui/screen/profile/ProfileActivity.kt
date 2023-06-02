@@ -1,4 +1,4 @@
-package com.plzgpt.lenzhub.ui.screen.lenz.post
+package com.plzgpt.lenzhub.ui.screen.profile
 
 import android.os.Bundle
 import android.util.Log
@@ -8,8 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostScreen
 
-class LenzPostActivity : ComponentActivity() {
+class ProfileActivity  : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -17,8 +18,8 @@ class LenzPostActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                Log.d("LenzPostActivity", "profileId??: ${intent.getIntExtra("postId", 0)}")
-                LenzPostScreen(this, intent.getIntExtra("postId", 0))
+                Profile2Screen(intent.getIntExtra("profileId", 0))
+            Log.d("ProfileActivity", "profileId: ${intent.getIntExtra("profileId", 0)}")
             }
         }
     }

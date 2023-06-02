@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 
 data class PostUiState(
     val id: Int = 0,
+    val userIdx : Int = 0,
     val title: String = "렌즈명",
     val userName: String = "제작자 이름",
     val profileImg: String = "",
@@ -40,9 +41,12 @@ class PostViewModel : ViewModel() {
     // 포스트 내용 요청
     fun getPostUiState(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         val result = postRepository.getPost(id)
+        Log.d("PostViewModel", "getPostUiState: $result")
+        Log.d("ProfileId", "getPostUiState: $result")
         _uiState.update {
             it.copy(
                 id = result.id,
+                userIdx = result.userIdx,
                 title = result.title,
                 userName = result.userName,
                 profileImg = result.profileImg ?: "",

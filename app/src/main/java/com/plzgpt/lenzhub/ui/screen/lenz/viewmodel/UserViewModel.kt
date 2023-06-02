@@ -53,11 +53,14 @@ class UserViewModel : ViewModel() {
                 name = result.name,
                 profileImgUrl = "",
                 followCounts = result.followCounts,
-                likeCounts = result.likeCounts,
+                userGrade = result.userGrade,
+                likedCounts = result.likedCounts,
                 likedPosts = result.likedPosts,
-                createdPosts = result.createdPosts,
+                createPosts = result.createPosts,
             )
         }
+
+        Log.d("결과",result.toString())
     }
 
     fun deleteUser(userId: Int) = viewModelScope.launch(Dispatchers.IO) {

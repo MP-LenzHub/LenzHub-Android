@@ -1,5 +1,6 @@
 package com.plzgpt.lenzhub.ui.screen.lenz.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plzgpt.lenzhub.api.RetrofitBuilder
@@ -27,7 +28,9 @@ class HomeViewModel : ViewModel() {
                 postList = result.postList
             )
         }
+    Log.d("HomeViewModel", "getAllPostState: ${result.postList}")
     }
+
 }
 
 class BoardRepository {
