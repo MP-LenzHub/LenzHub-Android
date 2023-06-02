@@ -14,7 +14,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -25,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.request.RequestOptions
 import com.plzgpt.lenzhub.ApplicationClass
@@ -34,9 +32,9 @@ import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.api.dto.GetSearchCategoryPost
 import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostActivity
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.HomeViewModel
-import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
 import com.plzgpt.lenzhub.ui.theme.LHDivider
 import com.plzgpt.lenzhub.ui.theme.LHMainBackground
+import com.plzgpt.lenzhub.ui.theme.randomImage
 import com.plzgpt.lenzhub.util.PostHeartCard
 import com.plzgpt.lenzhub.util.ShowProgressBar
 import com.plzgpt.lenzhub.util.bounceClick
@@ -110,21 +108,13 @@ fun ProfileInfo(userIdx : Int = 0, mode : Int = 0, userName:String = "test", use
     }
     val myId = ApplicationClass.sharedPreferences.getInt(ApplicationClass.clientId, 0)
 
-    var profile = arrayOf(
-        "https://techrecipe.co.kr/wp-content/uploads/2022/08/220819_Beautiful-Landscapes_ai_0001.jpg",
-        "https://i.namu.wiki/i/qFWfOHBd0mx7NmNquwtaSbUjnPumXpk5oi1jxNKpWUsv_eGJe44xm9AePkbhQ6hIxTjMtroFaOFPbhBy0MSbNQ.webp",
-                "https://src.hidoc.co.kr/image/lib/2022/5/12/1652337370806_0.jpg",
-                "https://img.danawa.com/prod_img/500000/869/844/img/2844869_1.jpg?_v=20210325103140",
-                "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/T76RHKX27GOS5BHD6LCD5W6DNQ.jpg")
-
-//Box로 바꿩
     Surface(
         modifier = if (mode == 0) Modifier.size(24.dp) else Modifier.size(50.dp),
         color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
         shape = CircleShape
     ) {
         GlideImage(
-            imageModel = if(userImage == null) profile[userIdx%profile.size] else userImage,
+            imageModel = if(userImage == "" || userImage == null) randomImage[userIdx%randomImage.size] else userImage,
             contentDescription = "",
             modifier = Modifier.size(20.dp)
         )

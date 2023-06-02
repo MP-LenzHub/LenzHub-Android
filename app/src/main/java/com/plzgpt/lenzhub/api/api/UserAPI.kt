@@ -29,13 +29,15 @@ interface UserAPI {
     // 팔로우 하기
     @POST("/api/follow")
     fun postFollow(
-        @Body body: FollowRequestBody
+        @Body toUserId : Int,
+        @Body fromUserId : Int
     ): Call<BaseResponse>
 
     // 팔로우 수정하기
     @PATCH("/api/follow")
     fun patchFollow(
-        @Body body: FollowRequestBody
+        @Body toUserId : Int,
+        @Body fromUserId : Int
     ): Call<BaseResponse>
 
     // 팔로우 정보 가져오기
