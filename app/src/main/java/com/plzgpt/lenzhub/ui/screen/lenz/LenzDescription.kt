@@ -50,6 +50,7 @@ fun LenzDescription(
     var focusManager = LocalFocusManager.current
     var title = remember { mutableStateOf("") }
     var description = remember { mutableStateOf("") }
+    var price = remember { mutableStateOf("0") }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var selectedCategory by remember { mutableStateOf(Category.ANIMAL) }
     val scope = rememberCoroutineScope()
@@ -155,6 +156,26 @@ fun LenzDescription(
                     isTextFieldFocused = remember { mutableStateOf(false) }
                 )
                 Spacer(modifier = Modifier.height(18.dp))
+                Text(
+                    text = "가격(원)",
+                    modifier = Modifier
+                        .padding(start = 18.dp),
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                EditText(
+                    modifier = Modifier
+                        .padding(horizontal = 18.dp)
+                        .fillMaxWidth(),
+                    title = "",
+                    data = price,
+                    isTextFieldFocused = remember { mutableStateOf(false) }
+                )
+                Spacer(modifier = Modifier.height(18.dp))
                 Row(
                     modifier = Modifier
                         .bounceClick {
@@ -246,7 +267,7 @@ fun LenzDescription(
 
                         val jsonData = JsonObject().apply {
                             addProperty("title", title.value)
-                            addProperty("price", 0)
+                            addProperty("price", price.value.toInt())
                             addProperty("description", description.value)
                             addProperty("category_name", selectedCategory.category)
                             add("lenzBasicInfoDto", jsonLenz)
