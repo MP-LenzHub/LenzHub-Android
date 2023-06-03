@@ -1,76 +1,41 @@
 package com.plzgpt.lenzhub.ui.screen.profile
-
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.plzgpt.lenzhub.ApplicationClass
 import com.plzgpt.lenzhub.R
-import com.plzgpt.lenzhub.api.RetrofitBuilder
-import com.plzgpt.lenzhub.api.dto.SignInResponseDTO
-import com.plzgpt.lenzhub.ui.data.Category
-import com.plzgpt.lenzhub.ui.route.NAV_ROUTE_SEARCH
-import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostScreen
+import com.plzgpt.lenzhub.api.dto.FollowRequestBody
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.UserViewModel
 import com.plzgpt.lenzhub.ui.screen.main.ProfileInfo
-import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryFreeScreen
 import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryLikeScreen
-import com.plzgpt.lenzhub.ui.screen.search.SearchCategoryPayScreen
-import com.plzgpt.lenzhub.ui.theme.LHBackground
-import com.plzgpt.lenzhub.ui.theme.LHBlack
-import com.plzgpt.lenzhub.ui.theme.LHGray
-import com.plzgpt.lenzhub.ui.theme.LHMainBackground
 import com.plzgpt.lenzhub.util.PostHeartCard
 import com.plzgpt.lenzhub.util.addFocusCleaner
 import com.plzgpt.lenzhub.util.bounceClick
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 @Composable
 fun ProfileScreen(
     userIdx : Int,
 ) {
-    val mContext = LocalContext.current
-
-
-    val isUserInfo = remember { mutableStateOf(false) }
-    var viewModel : UserViewModel = UserViewModel()
-
-
+    var viewModel = UserViewModel()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -84,9 +49,7 @@ fun ProfileScreen(
 
 @Composable
 fun MainScreen(userIdx: Int, viewModel : UserViewModel){
-    val userState by viewModel.userState.collectAsState()
     val profileState by viewModel.profileState.collectAsState()
-    val followerState by viewModel.followerState.collectAsState()
     val isLiked = remember { mutableStateOf(false) } // 좋아요 했는지 여부
 
     val myId = ApplicationClass.sharedPreferences.getInt(ApplicationClass.clientId, 0)
@@ -118,7 +81,19 @@ fun MainScreen(userIdx: Int, viewModel : UserViewModel){
                     grade = ""
                 )
                 if (myId != userIdx) {
-                    PostHeartCard(modifier = Modifier, heartState = isLiked)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .bounceClick {
+                                viewModel.postFollow(userIdx, myId)
+                            }
+
+                    ) {
+                        PostHeartCard(
+                            modifier = Modifier,
+                            heartState = isLiked,
+                        )
+                    }
                 }
             }
 

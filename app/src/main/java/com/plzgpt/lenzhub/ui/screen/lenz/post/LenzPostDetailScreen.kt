@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.PostUiState
@@ -27,11 +26,10 @@ import com.plzgpt.lenzhub.ui.theme.LHGray
 import com.skydoves.landscapist.glide.GlideImage
 import com.plzgpt.lenzhub.R
 import com.plzgpt.lenzhub.ui.screen.profile.ProfileActivity
+import com.plzgpt.lenzhub.ui.theme.randomImage
 import com.plzgpt.lenzhub.ui.view.LongButton
 import com.plzgpt.lenzhub.util.bounceClick
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -40,15 +38,6 @@ fun LenzPostDetailScreen(
     onNext: () -> Unit = {}
 ) {
     val uiState = uiStateFlow.value // 최신 uiState 값 가져오기
-    var profile = arrayOf(
-        "https://techrecipe.co.kr/wp-content/uploads/2022/08/220819_Beautiful-Landscapes_ai_0001.jpg",
-        "https://i.namu.wiki/i/qFWfOHBd0mx7NmNquwtaSbUjnPumXpk5oi1jxNKpWUsv_eGJe44xm9AePkbhQ6hIxTjMtroFaOFPbhBy0MSbNQ.webp",
-        "https://src.hidoc.co.kr/image/lib/2022/5/12/1652337370806_0.jpg",
-        "https://img.danawa.com/prod_img/500000/869/844/img/2844869_1.jpg?_v=20210325103140",
-        "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/T76RHKX27GOS5BHD6LCD5W6DNQ.jpg")
-
-
-
     Log.d("uiState77", uiState.toString())
 
     val context = LocalContext.current
@@ -72,7 +61,7 @@ fun LenzPostDetailScreen(
                      },
         ) {
             GlideImage(
-                imageModel = if(uiState.profileImg == "") profile[uiState.userIdx%profile.size] else uiState.profileImg,
+                imageModel = if(uiState.profileImg == "") randomImage[uiState.userIdx%randomImage.size] else uiState.profileImg,
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
