@@ -17,12 +17,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-data class Lenz(
-    val name: String = "렌즈명",
-    val effectValues: List<Float> = listOf(1f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0.5f),
-    val categories: List<String> = listOf("#풍경", "#인물"),
-)
-
 data class ApplyUiState(
     val photo: Uri = Uri.EMPTY,
     val photoBitmap: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
