@@ -30,6 +30,7 @@ import com.plzgpt.lenzhub.api.dto.GetSearchCategoryPost
 import com.plzgpt.lenzhub.ui.screen.lenz.post.LenzPostActivity
 import com.plzgpt.lenzhub.ui.theme.LHBlack
 import com.plzgpt.lenzhub.ui.theme.LHGray
+import com.plzgpt.lenzhub.ui.theme.randomImage
 import com.plzgpt.lenzhub.util.ShowProgressBar
 import com.plzgpt.lenzhub.util.bounceClick
 import com.skydoves.landscapist.glide.GlideImage
@@ -145,11 +146,7 @@ fun  SearchCategoryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 GlideImage(
-                    imageModel =
-                    if(postData.profileImg == null)
-                        R.drawable.ic_launcher_foreground
-                    else
-                        postData.profileImg,
+                    imageModel = randomImage[postData.userIdx % randomImage.size],
                     modifier = Modifier
                         .size(width = 20.dp, height = 20.dp)
                         .aspectRatio(1f)

@@ -141,9 +141,11 @@ fun LoginScreen() {
                                                 )
                                             }
                                             else{
-                                                Toast.makeText(mContext, "다시 한 번 확인해주세요.", Toast.LENGTH_LONG).show()
+                                               // Toast.makeText(mContext, "다시 한 번 확인해주세요.", Toast.LENGTH_LONG).show()
 
                                             }
+                                            Toast.makeText(mContext, res.message, Toast.LENGTH_LONG).show()
+
                                         }
                                     }
                                 }
