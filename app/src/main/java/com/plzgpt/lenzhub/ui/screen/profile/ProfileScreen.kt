@@ -139,7 +139,7 @@ fun FilterLike(filter : Int, like : Int){
         ){
             Spacer(Modifier.width(4.dp))
             Text(
-                "좋아요 : $like",
+                "저장 필터 수 : $like",
                 style = TextStyle(
                     fontWeight = FontWeight.Normal,
                     fontSize = 18.sp,
