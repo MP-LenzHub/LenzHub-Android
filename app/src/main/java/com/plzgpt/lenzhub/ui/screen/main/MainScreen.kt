@@ -219,7 +219,7 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                             },
                             requestOptions = {
                                 RequestOptions()
-                                    .override(128, 128)
+                                    .override(512, 512)
                             }
                         )
                     }
@@ -246,7 +246,7 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                             },
                             requestOptions = {
                                 RequestOptions()
-                                    .override(128, 128)
+                                    .override(512, 512)
                             }
                         )
                     }
