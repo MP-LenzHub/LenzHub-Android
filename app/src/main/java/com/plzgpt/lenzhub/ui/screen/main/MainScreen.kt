@@ -186,7 +186,7 @@ fun PostItem(index: Int, post: GetSearchCategoryPost){
                             grade = "Basic"
                         )
                     }
-                    PostHeartCard(modifier = Modifier, heartState = isLiked)
+                    //PostHeartCard(modifier = Modifier, heartState = isLiked)
                 }
                 Divider(color = LHDivider, thickness = 1.dp)
                 Row(

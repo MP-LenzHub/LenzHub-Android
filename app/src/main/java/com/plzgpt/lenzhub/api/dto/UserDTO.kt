@@ -1,8 +1,5 @@
 package com.plzgpt.lenzhub.api.dto
 
-import com.google.gson.annotations.SerializedName
-import com.plzgpt.lenzhub.ui.screen.lenz.viewmodel.Lenz
-
 data class PostUserRegisterResponse(
     val name: String,
     val userId: String,
